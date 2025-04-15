@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
     public Camera mainCamera;
     public Transform playerTransform;
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (playerTransform != null)
         {
