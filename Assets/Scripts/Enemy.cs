@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Enemy : GameCharacter
@@ -6,7 +7,12 @@ public class Enemy : GameCharacter
 
     public EnemyStats enemyStats;
 
+    // States
     private bool _isDamagingPlayer = false;
+    private bool _isDead = false;
+
+    private float _damageCooldown = 1f; // damage cooldown time in seconds
+    private float _damageTimer = 2f; // timer to track damage cooldown, start able to damage player
 
     void Update()
     {
@@ -28,9 +34,6 @@ public class Enemy : GameCharacter
     {
         if (other.CompareTag("Player"))
         {
-            // Handle collision with the player
-            Debug.Log("Enemy collided with the player!");
-            // You can add logic here to deal damage or trigger other effects
             _isDamagingPlayer = true;
         }
     }
@@ -39,27 +42,32 @@ public class Enemy : GameCharacter
     {
         if (other.CompareTag("Player"))
         {
-            // Handle exit from collision with the player
-            Debug.Log("Enemy exited collision with the player!");
-            // Reset the damaging state when the player exits the trigger
             _isDamagingPlayer = false;
         }
     }
 
     protected override void Die()
     {
-        // Handle enemy death logic here
-        Debug.Log("Enemy has died!");
-        Destroy(gameObject); // Destroy the enemy game object
+        _isDead = true;
     }
 
     private void DamagePlayer()
     {
         if (_isDamagingPlayer && player != null)
         {
-            Debug.Log("Enemy is damaging the player!");
-            // Deal damage to the player
-            player.TakeDamage(enemyStats.damage * Time.deltaTime); // Adjust damage amount as needed
+            // Check if the damage cooldown has elapsed
+            _damageTimer += Time.deltaTime;
+            if (_damageTimer >= _damageCooldown)
+            {
+                // Deal damage to the player
+                player.TakeDamage(enemyStats.damage);
+                _damageTimer = 0f; // Reset the damage timer
+            }
         }
+    }
+
+    internal bool IsDead()
+    {
+        return _isDead;
     }
 }
