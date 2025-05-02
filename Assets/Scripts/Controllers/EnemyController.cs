@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -11,6 +12,8 @@ public class EnemyController : MonoBehaviour
     private const float _spawnRadius = 5f; // Radius around the player to spawn enemies
     private int _enemyId = 0; // Unique ID for each enemy
     private const float _zPosition = -1f; // Fixed Z position for spawning enemies
+
+    private List<Enemy> _enemies = new List<Enemy>(); // List to keep track of spawned enemies
 
     void Start()
     {
@@ -52,5 +55,27 @@ public class EnemyController : MonoBehaviour
         newEnemy.gameObject.tag = "Enemy";
         // Set the enemy's name to "Enemy" for identification
         newEnemy.gameObject.name = $"Enemy {_enemyId}";
+
+        _enemies.Add(newEnemy); // Add the new enemy to the list
+    }
+
+    void Update()
+    {
+        // clear dead enemies from the list
+        List<Enemy> deadEnemies = new List<Enemy>();
+        foreach (Enemy enemy in _enemies)
+        {
+            if (enemy.IsDead())
+            {
+                deadEnemies.Add(enemy);
+            }
+        }
+        foreach (Enemy deadEnemy in deadEnemies)
+        {
+            _enemies.Remove(deadEnemy);
+            Destroy(deadEnemy.gameObject); // Destroy the enemy game object
+        }
+        // update player's enemies list
+        player.UpdateEnemyList(_enemies);
     }
 }

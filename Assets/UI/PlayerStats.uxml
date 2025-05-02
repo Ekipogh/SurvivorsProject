@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:IntegerField label="❤️" value="42" name="HealthField" data-source="project://database/Assets/ScriptableObjects/Player.asset?fileID=11400000&amp;guid=19f485fa95d9aba4398b47a626cf8e41&amp;type=2#Player" data-source-path="currentHealth" enabled="true" focusable="false" readonly="true" style="align-items: auto; justify-content: flex-end; flex-direction: row; width: auto; -unity-text-align: upper-right; align-self: flex-end; white-space: nowrap; visibility: visible; overflow: hidden;">
+        <Bindings>
+            <ui:DataBinding property="value" binding-mode="ToTarget" />
+        </Bindings>
+    </ui:IntegerField>
+</ui:UXML>
