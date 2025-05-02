@@ -1,4 +1,5 @@
 using System;
+using Microlight.MicroBar;
 using UnityEngine;
 
 public class Enemy : GameCharacter
@@ -14,6 +15,10 @@ public class Enemy : GameCharacter
     private float _damageCooldown = 1f; // damage cooldown time in seconds
     private float _damageTimer = 2f; // timer to track damage cooldown, start able to damage player
 
+    public Vector3 rotatation;
+
+    public Transform sprite;
+
     void Update()
     {
         // Move towards the player
@@ -25,7 +30,7 @@ public class Enemy : GameCharacter
             Vector3 targetDirection = player.transform.position - transform.position;
             float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg - 90f;
             Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, stats.speed * Time.deltaTime);
+            sprite.transform.rotation = Quaternion.RotateTowards(sprite.transform.rotation, rotation, stats.rotationSpeed * Time.deltaTime);
         }
         DamagePlayer();
     }

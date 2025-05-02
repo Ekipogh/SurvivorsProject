@@ -19,13 +19,4 @@ public class SimpleBullet : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    void Update()
-    {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            Debug.Log("Velocity: " + rb.linearVelocity);
-        }
-    }
 }
