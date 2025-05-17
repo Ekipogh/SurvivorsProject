@@ -9,12 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eb104333702b8a4e8bb56272824da8c, type: 3}
-  m_Name: SimpleWeaponStats
+  m_Script: {fileID: 11500000, guid: fb16a3de02d1c99449c2763bfa37a775, type: 3}
+  m_Name: SimpleLazerGunBehavior
   m_EditorClassIdentifier: 
-  damageModifier: 10
-  rotationSpeed: 50
-  range: 20
-  attackAngle: 45
-  cooldownTime: 1
-  bulletSpeed: 10
