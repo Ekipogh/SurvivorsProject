@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageModifier: 10
   rotationSpeed: 50
-  range: 5
+  range: 50
   attackAngle: 45
   cooldownTime: 1
   bulletSpeed: 20
