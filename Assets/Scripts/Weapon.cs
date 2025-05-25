@@ -17,8 +17,17 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
+        // Weapon behaviour:
+        // 1. Choose a target according to targeting behaviour. TODO: Implement targeting behaviour as a ScriptableObject
+        // 2. Aim at the target
+        // 3. If aimed at the target, attack the target
         ChooseTarget();
-        AttackEnemy();
+        var isAimed = Aim();
+        Debug.Log("Weapon " + gameObject.name + " aiming at target: " + (_targetEnemy != null ? _targetEnemy.name : "None"));
+        if (isAimed)
+        {
+            AttackEnemy();
+        }
     }
 
     private void ChooseTarget()
@@ -50,8 +59,6 @@ public class Weapon : MonoBehaviour
     {
         if (_targetEnemy != null)
         {
-            RotateTowardsTarget();
-
             // Check if the attack cooldown has elapsed
             attackTimer += Time.deltaTime;
             if (attackTimer >= stats.cooldownTime)
@@ -68,7 +75,19 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private void RotateTowardsTarget()
+    private bool Aim()
+    {
+        // if there is a target enemy, rotate towards it
+        // if the target is within range and angle, return true
+        if (_targetEnemy != null)
+        {
+            var isInRange = RotateTowardsTarget();
+            return isInRange;
+        }
+        return false; // No target to aim at
+    }
+
+    private bool RotateTowardsTarget()
     {
         if (_targetEnemy != null)
         {
@@ -77,6 +96,17 @@ public class Weapon : MonoBehaviour
             float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg - 90f;
             Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, stats.rotationSpeed * Time.deltaTime);
+
+            // Check if the target is within range and angle
+            float distanceToTarget = Vector2.Distance(transform.position, _targetEnemy.transform.position);
+            float angleToTarget = Vector2.Angle(transform.up, targetDirection);
+            return distanceToTarget <= stats.range && angleToTarget <= stats.attackAngle / 2f;
         }
+        return false; // No target to rotate towards
+    }
+
+    public Enemy TargetEnemy
+    {
+        get { return _targetEnemy; }
     }
 }
