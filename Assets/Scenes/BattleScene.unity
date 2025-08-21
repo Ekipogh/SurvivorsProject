@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 79054388}
   m_Layer: 0
   m_Name: ObjectsMap
-  m_TagString: Untagged
+  m_TagString: CollidableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58747,7 +58747,7 @@ GameObject:
   - component: {fileID: 1807378146}
   m_Layer: 0
   m_Name: WallMap
-  m_TagString: Untagged
+  m_TagString: CollidableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

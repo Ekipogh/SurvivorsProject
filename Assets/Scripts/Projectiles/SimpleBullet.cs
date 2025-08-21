@@ -10,8 +10,7 @@ public class SimpleBullet : MonoBehaviour
             // Get the Enemy component from the collided object
             if (collision.TryGetComponent<Enemy>(out var enemy))
             {
-                Debug.Log("Hit enemy: " + enemy.name);
-                // Deal damage to the enemy
+                // Apply damage to the enemy
                 enemy.TakeDamage(10f); // Replace 10f with the actual damage value
             }
 
