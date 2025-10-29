@@ -3,11 +3,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SimpleHitscanBehavior", menuName = "Scriptable Objects/SimpleHitscanBehavior")]
 public class SimpleHitscanBehavior : ProjectileBehaviour
 {
-    public float range = 100f;
-    public float damage = 50f;
-
     public override void Shoot(Weapon weapon)
     {
+        float range = weapon.stats.range;
+        float damage = weapon.stats.damageModifier;
+
         if (weapon.TargetEnemy == null) return;
 
         // Perform a raycast to detect the target
