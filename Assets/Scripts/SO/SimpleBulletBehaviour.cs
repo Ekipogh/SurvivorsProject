@@ -17,6 +17,6 @@ public class SimpleBulletBehaviour : ProjectileBehaviour
         Vector3 shootDirection = weapon.transform.up;
 
         // Apply force to the bullet in the shoot direction
-        rb.linearVelocity = shootDirection * weapon.stats.bulletSpeed;
+        rb.linearVelocity = shootDirection * weapon.stats.projectileSpeed;
     }
 }

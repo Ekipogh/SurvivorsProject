@@ -23,7 +23,6 @@ public class Weapon : MonoBehaviour
         // 3. If aimed at the target, attack the target
         ChooseTarget();
         var isAimed = Aim();
-        Debug.Log("Weapon " + gameObject.name + " aiming at target: " + (_targetEnemy != null ? _targetEnemy.name : "None"));
         if (isAimed)
         {
             AttackEnemy();

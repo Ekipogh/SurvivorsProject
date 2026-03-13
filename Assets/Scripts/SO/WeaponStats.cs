@@ -9,5 +9,6 @@ public class WeaponStats : ScriptableObject
     public float attackAngle = 45f; // Angle of attack cone
     public float cooldownTime = 1f; // Cooldown time between attacks
 
-    public float bulletSpeed = 20f; // Speed of the bullet
+    public float projectileSpeed = 20f; // Speed of the projectile
+    public float aoeRadius = 2f; // Radius of area of effect for explosive weapons
 }
