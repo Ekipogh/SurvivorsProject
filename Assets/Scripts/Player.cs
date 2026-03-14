@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : GameCharacter
@@ -6,6 +7,8 @@ public class Player : GameCharacter
 
     private Vector2 _moveDirection;
     private Vector2 _lookDirection;
+
+    public List<Weapon> weapons = new List<Weapon>();
 
     public Rigidbody2D Rb
     {
@@ -61,5 +64,13 @@ public class Player : GameCharacter
     protected override void Die()
     {
         Debug.Log("Player has died.");
+    }
+
+    public void UpdateEnemyList(List<Enemy> enemyList)
+    {
+        foreach (Weapon weapon in weapons)
+        {
+            weapon.enemyList = enemyList;
+        }
     }
 }
