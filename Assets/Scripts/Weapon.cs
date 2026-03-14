@@ -7,6 +7,10 @@ public class Weapon : MonoBehaviour
     public List<Enemy> enemyList = new();
     private Enemy _targetEnemy; // The enemy currently targeted for attack
 
+    private bool _hasLoggedMissingStats;
+    private bool _hasLoggedMissingProjectileBehaviour;
+    private bool _hasLoggedMissingFiringPoint;
+
     private float attackTimer = 0f; // Timer to track attack cooldown
 
     public ProjectileBehaviour projectileBehaviour;
@@ -17,6 +21,11 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
+        if (!HasRequiredReferences())
+        {
+            return;
+        }
+
         // Weapon behaviour:
         // 1. Choose a target according to targeting behaviour. TODO: Implement targeting behaviour as a ScriptableObject
         // 2. Aim at the target
@@ -29,15 +38,57 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    private bool HasRequiredReferences()
+    {
+        bool hasAllReferences = true;
+
+        if (stats == null)
+        {
+            if (!_hasLoggedMissingStats)
+            {
+                Debug.LogWarning($"{name}: Missing WeaponStats reference.", this);
+                _hasLoggedMissingStats = true;
+            }
+            hasAllReferences = false;
+        }
+
+        if (projectileBehaviour == null)
+        {
+            if (!_hasLoggedMissingProjectileBehaviour)
+            {
+                Debug.LogWarning($"{name}: Missing ProjectileBehaviour reference.", this);
+                _hasLoggedMissingProjectileBehaviour = true;
+            }
+            hasAllReferences = false;
+        }
+
+        if (firingPoint == null)
+        {
+            if (!_hasLoggedMissingFiringPoint)
+            {
+                Debug.LogWarning($"{name}: Missing firingPoint reference.", this);
+                _hasLoggedMissingFiringPoint = true;
+            }
+            hasAllReferences = false;
+        }
+
+        return hasAllReferences;
+    }
+
     private void ChooseTarget()
     {
         // Find the closest enemy within range and the attack angle
         Enemy closestEnemy = null;
-        if (enemyList.Count > 0)
+        if (enemyList != null && enemyList.Count > 0)
         {
             float closestDistance = Mathf.Infinity;
             foreach (Enemy enemy in enemyList)
             {
+                if (enemy == null)
+                {
+                    continue;
+                }
+
                 float distance = Vector2.Distance(transform.position, enemy.transform.position);
                 if (distance < closestDistance && distance <= stats.range)
                 {
@@ -56,21 +107,20 @@ public class Weapon : MonoBehaviour
 
     private void AttackEnemy()
     {
-        if (_targetEnemy != null)
-        {
-            // Check if the attack cooldown has elapsed
-            attackTimer += Time.deltaTime;
-            if (attackTimer >= stats.cooldownTime)
-            {
-                Debug.Log("Attacking enemy: " + _targetEnemy.name);
-                projectileBehaviour.Shoot(this);
-                attackTimer = 0f; // Reset the attack timer
-            }
-        }
-        else
+        if (_targetEnemy == null)
         {
             // Reset the attack timer if no target is found
             attackTimer = 0f;
+            return;
+        }
+
+        // Check if the attack cooldown has elapsed
+        attackTimer += Time.deltaTime;
+        if (attackTimer >= stats.cooldownTime)
+        {
+            Debug.Log("Attacking enemy: " + _targetEnemy.name);
+            projectileBehaviour.Shoot(this);
+            attackTimer = 0f; // Reset the attack timer
         }
     }
 
@@ -78,12 +128,13 @@ public class Weapon : MonoBehaviour
     {
         // if there is a target enemy, rotate towards it
         // if the target is within range and angle, return true
-        if (_targetEnemy != null)
+        if (_targetEnemy == null)
         {
-            var isInRange = RotateTowardsTarget();
-            return isInRange;
+            return false; // No target to aim at
         }
-        return false; // No target to aim at
+
+        var isInRange = RotateTowardsTarget();
+        return isInRange;
     }
 
     private bool RotateTowardsTarget()
