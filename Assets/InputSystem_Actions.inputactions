@@ -157,17 +157,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "e6a62ccd-66f2-4d38-a281-9c92374f079b",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "Keyboard",
                     "id": "f9114bf4-21fb-4783-a4e3-3f42a4c34288",
                     "path": "1DAxis",
