@@ -7,6 +7,7 @@ public class WeaponStats : ScriptableObject
     public float rotationSpeed = 50f; // Speed of rotation towards the target
     public float range = 5f; // Range of the weapon
     public float attackAngle = 45f; // Angle of attack cone
+    public float aimTolerance = 6f; // Angle threshold required to fire at the target
     public float cooldownTime = 1f; // Cooldown time between attacks
 
     public float projectileSpeed = 20f; // Speed of the projectile

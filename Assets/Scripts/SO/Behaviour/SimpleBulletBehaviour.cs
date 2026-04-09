@@ -7,16 +7,12 @@ public class SimpleBulletBehaviour : WeaponBehaviour
 
     public override void Shoot(Weapon weapon)
     {
-        // Instantiate the bullet prefab at the weapon's position and rotation
-        GameObject bullet = Instantiate(bulletPrefab, weapon.transform.position, weapon.transform.rotation);
+        GameObject bullet = Instantiate(bulletPrefab, weapon.ProjectileSpawnPosition, weapon.ProjectileSpawnRotation);
 
-        // Get the Rigidbody component of the bullet
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
-        // Calculate the direction to shoot the bullet based on the weapon's forward direction
-        Vector3 shootDirection = weapon.transform.up;
+        Vector2 shootDirection = weapon.AimDirection;
 
-        // Apply force to the bullet in the shoot direction
         rb.linearVelocity = shootDirection * weapon.stats.projectileSpeed;
     }
 }

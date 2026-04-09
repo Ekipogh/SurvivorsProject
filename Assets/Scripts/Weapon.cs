@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    private const float MinDirectionSqrMagnitude = 0.0001f;
+
     public WeaponStats stats;
     public List<Enemy> enemyList = new();
     private Enemy _targetEnemy; // The enemy currently targeted for attack
@@ -18,6 +20,12 @@ public class Weapon : MonoBehaviour
     public Transform firingPoint; // The point from which the projectile will be fired
 
     public Player player; // Reference to the player
+
+    public Vector3 ProjectileSpawnPosition => firingPoint != null ? firingPoint.position : transform.position;
+
+    public Quaternion ProjectileSpawnRotation => firingPoint != null ? firingPoint.rotation : transform.rotation;
+
+    public Vector2 AimDirection => firingPoint != null ? firingPoint.up : transform.up;
 
     private void Update()
     {
@@ -77,31 +85,32 @@ public class Weapon : MonoBehaviour
 
     private void ChooseTarget()
     {
-        // Find the closest enemy within range and the attack angle
+        float halfAttackAngle = stats.attackAngle * 0.5f;
+        if (IsTargetWithinAngleAndRange(_targetEnemy, halfAttackAngle))
+        {
+            return;
+        }
+
         Enemy closestEnemy = null;
         if (enemyList != null && enemyList.Count > 0)
         {
             float closestDistance = Mathf.Infinity;
             foreach (Enemy enemy in enemyList)
             {
-                if (enemy == null)
+                if (!IsTargetWithinAngleAndRange(enemy, halfAttackAngle))
                 {
                     continue;
                 }
 
-                float distance = Vector2.Distance(transform.position, enemy.transform.position);
-                if (distance < closestDistance && distance <= stats.range)
+                float distance = Vector2.Distance(GetAimOrigin(), enemy.transform.position);
+                if (distance < closestDistance)
                 {
-                    Vector2 directionToEnemy = (enemy.transform.position - transform.position).normalized;
-                    float angle = Vector2.Angle(transform.up, directionToEnemy);
-                    if (angle <= stats.attackAngle / 2f) // Check if within attack angle
-                    {
-                        closestDistance = distance;
-                        closestEnemy = enemy;
-                    }
+                    closestDistance = distance;
+                    closestEnemy = enemy;
                 }
             }
         }
+
         _targetEnemy = closestEnemy;
     }
 
@@ -141,16 +150,19 @@ public class Weapon : MonoBehaviour
     {
         if (_targetEnemy != null)
         {
-            // rotate towards the target enemy
             Vector3 targetDirection = _targetEnemy.transform.position - transform.position;
+            if (targetDirection.sqrMagnitude <= MinDirectionSqrMagnitude)
+            {
+                return false;
+            }
+
             float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg - 90f;
             Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, stats.rotationSpeed * Time.deltaTime);
 
-            // Check if the target is within range and angle
-            float distanceToTarget = Vector2.Distance(transform.position, _targetEnemy.transform.position);
-            float angleToTarget = Vector2.Angle(transform.up, targetDirection);
-            return distanceToTarget <= stats.range && angleToTarget <= stats.attackAngle / 2f;
+            float distanceToTarget = Vector2.Distance(GetAimOrigin(), _targetEnemy.transform.position);
+            float angleToTarget = Vector2.Angle(AimDirection, targetDirection);
+            return distanceToTarget <= stats.range && angleToTarget <= stats.aimTolerance;
         }
         return false; // No target to rotate towards
     }
@@ -158,5 +170,33 @@ public class Weapon : MonoBehaviour
     public Enemy TargetEnemy
     {
         get { return _targetEnemy; }
+    }
+
+    private Vector2 GetAimOrigin()
+    {
+        return firingPoint != null ? firingPoint.position : transform.position;
+    }
+
+    private bool IsTargetWithinAngleAndRange(Enemy enemy, float halfAttackAngle)
+    {
+        if (enemy == null)
+        {
+            return false;
+        }
+
+        Vector2 directionToEnemy = (Vector2)enemy.transform.position - GetAimOrigin();
+        if (directionToEnemy.sqrMagnitude <= MinDirectionSqrMagnitude)
+        {
+            return false;
+        }
+
+        float distance = directionToEnemy.magnitude;
+        if (distance > stats.range)
+        {
+            return false;
+        }
+
+        float angle = Vector2.Angle(AimDirection, directionToEnemy);
+        return angle <= halfAttackAngle;
     }
 }
