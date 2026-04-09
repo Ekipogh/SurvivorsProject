@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SimpleBulletBehaviour", menuName = "Scriptable Objects/SimpleBulletBehaviour")]
-public class SimpleBulletBehaviour : ProjectileBehaviour
+public class SimpleBulletBehaviour : WeaponBehaviour
 {
     public GameObject bulletPrefab; // Prefab of the bullet to be instantiated
 

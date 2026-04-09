@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SimpleHitscanBehavior", menuName = "Scriptable Objects/SimpleHitscanBehavior")]
-public class SimpleHitscanBehavior : ProjectileBehaviour
+public class SimpleHitscanBehavior : WeaponBehaviour
 {
     public override void Shoot(Weapon weapon)
     {

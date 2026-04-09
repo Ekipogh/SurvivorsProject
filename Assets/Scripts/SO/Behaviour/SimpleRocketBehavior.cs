@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SimpleRocketBehavior", menuName = "Scriptable Objects/SimpleRocketBehavior")]
-public class SimpleRocketBehavior : ProjectileBehaviour
+public class SimpleRocketBehavior : WeaponBehaviour
 {
     public GameObject rocketPrefab; // Prefab of the rocket to be instantiated
 

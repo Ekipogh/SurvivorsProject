@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SimpleLazerGunBehavior", menuName = "Scriptable Objects/SimpleLazerGunBehavior")]
-public class SimpleLazerGunBehavior : ProjectileBehaviour
+public class SimpleLazerGunBehavior : WeaponBehaviour
 {
     public Sprite lazerSprite; // Sprite for the laser
     private const float laserWidth = 0.1f; // Width of the laser line
