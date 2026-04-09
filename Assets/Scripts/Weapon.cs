@@ -150,7 +150,8 @@ public class Weapon : MonoBehaviour
     {
         if (_targetEnemy != null)
         {
-            Vector3 targetDirection = _targetEnemy.transform.position - transform.position;
+            Vector2 aimOrigin = GetAimOrigin();
+            Vector2 targetDirection = (Vector2)_targetEnemy.transform.position - aimOrigin;
             if (targetDirection.sqrMagnitude <= MinDirectionSqrMagnitude)
             {
                 return false;
@@ -160,7 +161,7 @@ public class Weapon : MonoBehaviour
             Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, stats.rotationSpeed * Time.deltaTime);
 
-            float distanceToTarget = Vector2.Distance(GetAimOrigin(), _targetEnemy.transform.position);
+            float distanceToTarget = targetDirection.magnitude;
             float angleToTarget = Vector2.Angle(AimDirection, targetDirection);
             return distanceToTarget <= stats.range && angleToTarget <= stats.aimTolerance;
         }
