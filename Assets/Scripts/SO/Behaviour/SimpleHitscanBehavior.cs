@@ -11,9 +11,10 @@ public class SimpleHitscanBehavior : WeaponBehaviour
         if (weapon.TargetEnemy == null) return;
 
         RaycastHit2D hit = Physics2D.Raycast(weapon.ProjectileSpawnPosition, weapon.AimDirection, range);
-        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+        Enemy hitEnemy = hit.collider != null && hit.collider.CompareTag("Enemy") ? hit.collider.GetComponent<Enemy>() : null;
+        if (hitEnemy != null)
         {
-            weapon.TargetEnemy.TakeDamage(damage);
+            hitEnemy.TakeDamage(damage);
         }
     }
 }
