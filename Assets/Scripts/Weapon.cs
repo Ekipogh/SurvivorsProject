@@ -13,7 +13,7 @@ public class Weapon : MonoBehaviour
 
     private float attackTimer = 0f; // Timer to track attack cooldown
 
-    public ProjectileBehaviour projectileBehaviour;
+    public WeaponBehaviour projectileBehaviour;
 
     public Transform firingPoint; // The point from which the projectile will be fired
 
