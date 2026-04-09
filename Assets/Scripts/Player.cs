@@ -11,6 +11,7 @@ public class Player : GameCharacter
     private Vector2 _currentVelocity;
     private Vector2 _lookDirection;
     private Vector2 _moveInput;
+    private float _rotationInput;
     private bool _hasLookDirection;
 
     public List<Weapon> weapons = new List<Weapon>();
@@ -33,6 +34,7 @@ public class Player : GameCharacter
         _currentVelocity = Vector2.zero;
         _lookDirection = Vector2.zero;
         _moveInput = Vector2.zero;
+        _rotationInput = 0f;
         _hasLookDirection = false;
         base.Awake();
     }
@@ -51,6 +53,11 @@ public class Player : GameCharacter
 
         _lookDirection = direction.normalized;
         _hasLookDirection = true;
+    }
+
+    public void Rotate(float direction)
+    {
+        _rotationInput = Mathf.Clamp(direction, -1f, 1f);
     }
 
     void FixedUpdate()
@@ -86,6 +93,13 @@ public class Player : GameCharacter
 
     private void RotatePlayer()
     {
+        if (!Mathf.Approximately(_rotationInput, 0f))
+        {
+            float nextAngle = Rb.rotation - _rotationInput * stats.rotationSpeed * Time.fixedDeltaTime;
+            Rb.MoveRotation(nextAngle);
+            return;
+        }
+
         if (_hasLookDirection)
         {
             float angle = Mathf.Atan2(_lookDirection.y, _lookDirection.x) * Mathf.Rad2Deg - 90f;
