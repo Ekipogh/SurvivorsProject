@@ -1,13 +1,36 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
     public Player player;
 
+    private Camera _mainCamera;
+    private Vector2 _mouseScreenPosition;
+    private bool _hasMouseScreenPosition;
 
     private bool _isGamepad = false;
+
+    private Camera MainCamera
+    {
+        get
+        {
+            if (_mainCamera == null)
+            {
+                _mainCamera = Camera.main;
+            }
+
+            return _mainCamera;
+        }
+    }
+
+    private void Update()
+    {
+        if (!_isGamepad)
+        {
+            UpdateMouseLook();
+        }
+    }
 
     void OnMove(InputValue value)
     {
@@ -20,24 +43,45 @@ public class PlayerController : MonoBehaviour
         var lookInput = value.Get<Vector2>();
         if (_isGamepad)
         {
-            if (lookInput.magnitude > 0.1f)
+            if (lookInput.sqrMagnitude > player.stats.lookInputDeadzone * player.stats.lookInputDeadzone)
             {
                 player.LookTowards(lookInput);
             }
         }
         else
         {
-            var mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(lookInput.x, lookInput.y, Camera.main.nearClipPlane));
-            mousePosition.z = 0; // Ensure we are only rotating in the XY plane
-            var direction = (mousePosition - player.transform.position).normalized;
-            direction.z = 0; // Ensure we are only rotating in the XY plane
-            lookInput = direction;
-            player.LookTowards(lookInput);
+            _mouseScreenPosition = lookInput;
+            _hasMouseScreenPosition = true;
         }
     }
 
     void OnControlsChanged(PlayerInput playerInput)
     {
         _isGamepad = playerInput.currentControlScheme == "Gamepad";
+    }
+
+    private void UpdateMouseLook()
+    {
+        if (player == null || MainCamera == null)
+        {
+            return;
+        }
+
+        if (Mouse.current != null)
+        {
+            _mouseScreenPosition = Mouse.current.position.ReadValue();
+            _hasMouseScreenPosition = true;
+        }
+
+        if (!_hasMouseScreenPosition)
+        {
+            return;
+        }
+
+        Vector3 mousePosition = MainCamera.ScreenToWorldPoint(new Vector3(_mouseScreenPosition.x, _mouseScreenPosition.y, Mathf.Abs(MainCamera.transform.position.z)));
+        mousePosition.z = 0f;
+
+        Vector2 direction = mousePosition - player.transform.position;
+        player.LookTowards(direction);
     }
 }

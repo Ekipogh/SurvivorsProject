@@ -5,8 +5,13 @@ public class Player : GameCharacter
 {
     private Rigidbody2D _rb;
 
-    private Vector2 _moveDirection;
+    private readonly Dictionary<string, float> _speedBonuses = new();
+    private readonly Dictionary<string, float> _speedMultipliers = new();
+
+    private Vector2 _currentVelocity;
     private Vector2 _lookDirection;
+    private Vector2 _moveInput;
+    private bool _hasLookDirection;
 
     public List<Weapon> weapons = new List<Weapon>();
 
@@ -25,19 +30,27 @@ public class Player : GameCharacter
 
     protected override void Awake()
     {
-        _moveDirection = Vector2.zero;
+        _currentVelocity = Vector2.zero;
         _lookDirection = Vector2.zero;
+        _moveInput = Vector2.zero;
+        _hasLookDirection = false;
         base.Awake();
     }
 
     public void Move(Vector2 direction)
     {
-        _moveDirection = direction;
+        _moveInput = direction;
     }
 
     public void LookTowards(Vector2 direction)
     {
-        _lookDirection = direction;
+        if (direction.sqrMagnitude <= stats.lookInputDeadzone * stats.lookInputDeadzone)
+        {
+            return;
+        }
+
+        _lookDirection = direction.normalized;
+        _hasLookDirection = true;
     }
 
     void FixedUpdate()
@@ -48,18 +61,82 @@ public class Player : GameCharacter
 
     private void MovePlayer()
     {
-        _moveDirection = _moveDirection.normalized * stats.speed * Time.deltaTime;
-        Rb.MovePosition(Rb.position + _moveDirection);
+        Vector2 desiredInput = _moveInput;
+        if (desiredInput.sqrMagnitude <= stats.moveInputDeadzone * stats.moveInputDeadzone)
+        {
+            desiredInput = Vector2.zero;
+        }
+        else if (desiredInput.sqrMagnitude > 1f)
+        {
+            desiredInput.Normalize();
+        }
+
+        float modifiedSpeed = GetModifiedSpeed();
+        Vector2 targetVelocity = desiredInput * modifiedSpeed;
+        float acceleration = desiredInput == Vector2.zero ? stats.deceleration : stats.acceleration;
+        _currentVelocity = Vector2.MoveTowards(_currentVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
+
+        if (_currentVelocity.sqrMagnitude <= 0.0001f)
+        {
+            _currentVelocity = Vector2.zero;
+        }
+
+        Rb.MovePosition(Rb.position + _currentVelocity * Time.fixedDeltaTime);
     }
 
     private void RotatePlayer()
     {
-        if (_lookDirection.magnitude > 0.1f)
+        if (_hasLookDirection)
         {
             float angle = Mathf.Atan2(_lookDirection.y, _lookDirection.x) * Mathf.Rad2Deg - 90f;
-            Rb.MoveRotation(Mathf.LerpAngle(Rb.rotation, angle, stats.rotationSpeed * Time.deltaTime));
+            float nextAngle = Mathf.MoveTowardsAngle(Rb.rotation, angle, stats.rotationSpeed * Time.fixedDeltaTime);
+            Rb.MoveRotation(nextAngle);
         }
     }
+
+    public void SetSpeedMultiplier(string sourceId, float multiplier)
+    {
+        if (string.IsNullOrWhiteSpace(sourceId))
+        {
+            return;
+        }
+
+        _speedMultipliers[sourceId] = Mathf.Max(0f, multiplier);
+    }
+
+    public void RemoveSpeedMultiplier(string sourceId)
+    {
+        if (string.IsNullOrWhiteSpace(sourceId))
+        {
+            return;
+        }
+
+        _speedMultipliers.Remove(sourceId);
+    }
+
+    public void SetSpeedBonus(string sourceId, float bonus)
+    {
+        if (string.IsNullOrWhiteSpace(sourceId))
+        {
+            return;
+        }
+
+        _speedBonuses[sourceId] = bonus;
+    }
+
+    public void RemoveSpeedBonus(string sourceId)
+    {
+        if (string.IsNullOrWhiteSpace(sourceId))
+        {
+            return;
+        }
+
+        _speedBonuses.Remove(sourceId);
+    }
+
+    public Vector2 CurrentVelocity => _currentVelocity;
+
+    public float CurrentMoveSpeed => GetModifiedSpeed();
 
     protected override void Die()
     {
@@ -72,5 +149,22 @@ public class Player : GameCharacter
         {
             weapon.enemyList = enemyList;
         }
+    }
+
+    private float GetModifiedSpeed()
+    {
+        float speed = Mathf.Max(0f, stats.speed);
+
+        foreach (float bonus in _speedBonuses.Values)
+        {
+            speed += bonus;
+        }
+
+        foreach (float multiplier in _speedMultipliers.Values)
+        {
+            speed *= Mathf.Max(0f, multiplier);
+        }
+
+        return Mathf.Max(0f, speed);
     }
 }

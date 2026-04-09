@@ -11,14 +11,12 @@ public class SimpleLazerGunBehavior : WeaponBehaviour
     {
         if (weapon.TargetEnemy == null) return;
 
-        // Create a new GameObject for the laser line
         GameObject laserGO = new("LaserLine");
         LineRenderer lr = laserGO.AddComponent<LineRenderer>();
         lr.positionCount = 2;
-        lr.SetPosition(0, weapon.firingPoint.position);
+        lr.SetPosition(0, weapon.ProjectileSpawnPosition);
         lr.SetPosition(1, weapon.TargetEnemy.transform.position);
 
-        // Laser visuals
         lr.startWidth = laserWidth;
         lr.endWidth = laserWidth;
         lr.material = new Material(Shader.Find("Sprites/Default"));
@@ -26,10 +24,8 @@ public class SimpleLazerGunBehavior : WeaponBehaviour
         lr.endColor = laserColor;
 
         var damage = weapon.stats.damageModifier;
-        // Apply instant damage
         weapon.TargetEnemy.TakeDamage(damage);
 
-        // Start coroutine to fade and destroy the laser
         weapon.StartCoroutine(FadeOutLaser(lr, 0.2f));
 
     }
@@ -48,7 +44,6 @@ public class SimpleLazerGunBehavior : WeaponBehaviour
             yield return null;
         }
 
-        // Optionally disable the LineRenderer after fading out
         lineRenderer.enabled = false;
     }
 }
