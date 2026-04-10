@@ -61896,6 +61896,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 4627736573909668591}
   enemyPrefab: {fileID: 4348489072293277239, guid: 6f277ebfe9e168d4c901e1feb5721b9f, type: 3}
+  mapGrid: {fileID: 1889186008}
   spawnInterval: 2
   maxEnemies: 5
 --- !u!4 &1888124745
@@ -62165,6 +62166,10 @@ PrefabInstance:
     - target: {fileID: 7052818648322036675, guid: abc119b6a7a6ca2499d66b72639c8745, type: 3}
       propertyPath: m_Name
       value: SimpleRocketGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 7052818648322036675, guid: abc119b6a7a6ca2499d66b72639c8745, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
