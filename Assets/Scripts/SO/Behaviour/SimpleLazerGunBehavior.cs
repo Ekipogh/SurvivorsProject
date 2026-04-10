@@ -26,12 +26,13 @@ public class SimpleLazerGunBehavior : WeaponBehaviour
         var damage = weapon.stats.damageModifier;
         weapon.TargetEnemy.TakeDamage(damage);
 
-        weapon.StartCoroutine(FadeOutLaser(lr, 0.2f));
+        weapon.StartCoroutine(FadeOutLaser(laserGO, 0.2f));
 
     }
 
-    private IEnumerator FadeOutLaser(LineRenderer lineRenderer, float duration)
+    private IEnumerator FadeOutLaser(GameObject laserGO, float duration)
     {
+        LineRenderer lineRenderer = laserGO.GetComponent<LineRenderer>();
         float elapsedTime = 0f;
         Color startColor = lineRenderer.startColor;
         Color endColor = new(startColor.r, startColor.g, startColor.b, 0f);
@@ -44,6 +45,6 @@ public class SimpleLazerGunBehavior : WeaponBehaviour
             yield return null;
         }
 
-        lineRenderer.enabled = false;
+        Destroy(laserGO);
     }
 }
