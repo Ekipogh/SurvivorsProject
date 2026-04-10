@@ -1,24 +1,92 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class EnemyController : MonoBehaviour
 {
     public Player player;
     public Enemy enemyPrefab;
 
+    public GameObject mapGrid;
+
     public int spawnInterval = 2; // Time interval between spawns in seconds
     public int maxEnemies = 5; // Maximum number of enemies allowed in the scene
     private const float _spawnRadius = 5f; // Radius around the player to spawn enemies
     private int _enemyId = 0; // Unique ID for each enemy
     private const float _zPosition = -1f; // Fixed Z position for spawning enemies
+    private const int _maxSpawnAttempts = 20;
 
     private List<Enemy> _enemies = new List<Enemy>(); // List to keep track of spawned enemies
+
+    private Tilemap _groundMap;
+    private Tilemap _wallMap;
+    private Tilemap _objectsMap;
+    private Bounds _spawnBounds;
 
     void Start()
     {
         // Start the enemy spawn coroutine
         StartCoroutine(SpawnEnemies());
+    }
+
+    void Awake()
+    {
+        CacheTilemaps();
+
+        if (_groundMap == null)
+        {
+            Debug.LogError("EnemyController could not find GroundMap under the assigned mapGrid.");
+            enabled = false;
+            return;
+        }
+
+        _spawnBounds = GetTilemapWorldBounds(_groundMap);
+    }
+
+    private void CacheTilemaps()
+    {
+        if (mapGrid == null)
+        {
+            Debug.LogError("EnemyController requires a mapGrid reference.");
+            return;
+        }
+
+        Tilemap[] tilemaps = mapGrid.GetComponentsInChildren<Tilemap>();
+        foreach (Tilemap tilemap in tilemaps)
+        {
+            switch (tilemap.gameObject.name)
+            {
+                case "GroundMap":
+                    _groundMap = tilemap;
+                    break;
+                case "WallMap":
+                    _wallMap = tilemap;
+                    break;
+                case "ObjectsMap":
+                    _objectsMap = tilemap;
+                    break;
+            }
+        }
+
+        if (_groundMap == null && tilemaps.Length > 0)
+        {
+            _groundMap = tilemaps[0];
+        }
+    }
+
+    private Bounds GetTilemapWorldBounds(Tilemap tilemap)
+    {
+        BoundsInt cellBounds = tilemap.cellBounds;
+        Vector3 min = tilemap.CellToWorld(cellBounds.min);
+        Vector3 max = tilemap.CellToWorld(cellBounds.max);
+        Vector3 center = (min + max) * 0.5f;
+        Vector3 size = max - min;
+
+        center.z = _zPosition;
+        size.z = 0f;
+
+        return new Bounds(center, size);
     }
 
     private IEnumerator SpawnEnemies()
@@ -40,10 +108,12 @@ public class EnemyController : MonoBehaviour
     private void SpawnEnemy()
     {
         _enemyId++;
-        // Generate a random position within the spawn radius around the player
-        Vector3 spawnPosition = (Vector2)player.transform.position + Random.insideUnitCircle * _spawnRadius;
-        // Ensure the spawn position is within the bounds of the game world
-        spawnPosition.z = _zPosition; // Set the Z position to a fixed value
+        if (!TryGetSpawnPosition(out Vector3 spawnPosition))
+        {
+            Debug.LogWarning("EnemyController could not find a valid spawn position.");
+            _enemyId--;
+            return;
+        }
 
         // Instantiate the enemy prefab at the spawn position with no rotation
         Enemy newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
@@ -57,6 +127,64 @@ public class EnemyController : MonoBehaviour
         newEnemy.gameObject.name = $"Enemy {_enemyId}";
 
         _enemies.Add(newEnemy); // Add the new enemy to the list
+    }
+
+    private bool TryGetSpawnPosition(out Vector3 spawnPosition)
+    {
+        for (int attempt = 0; attempt < _maxSpawnAttempts; attempt++)
+        {
+            Vector3 candidate = (Vector2)player.transform.position + Random.insideUnitCircle * _spawnRadius;
+            candidate = ClampToSpawnBounds(candidate);
+
+            if (!IsSpawnCellWalkable(candidate, out Vector3 snappedSpawnPosition))
+            {
+                continue;
+            }
+
+            spawnPosition = snappedSpawnPosition;
+            return true;
+        }
+
+        spawnPosition = Vector3.zero;
+        return false;
+    }
+
+    private Vector3 ClampToSpawnBounds(Vector3 position)
+    {
+        Vector3 min = _spawnBounds.min;
+        Vector3 max = _spawnBounds.max;
+
+        position.x = Mathf.Clamp(position.x, min.x, max.x);
+        position.y = Mathf.Clamp(position.y, min.y, max.y);
+        position.z = _zPosition;
+
+        return position;
+    }
+
+    private bool IsSpawnCellWalkable(Vector3 position, out Vector3 snappedSpawnPosition)
+    {
+        Vector3Int cellPosition = _groundMap.WorldToCell(position);
+        if (!_groundMap.HasTile(cellPosition))
+        {
+            snappedSpawnPosition = Vector3.zero;
+            return false;
+        }
+
+        if (_wallMap != null && _wallMap.HasTile(cellPosition))
+        {
+            snappedSpawnPosition = Vector3.zero;
+            return false;
+        }
+
+        if (_objectsMap != null && _objectsMap.HasTile(cellPosition))
+        {
+            snappedSpawnPosition = Vector3.zero;
+            return false;
+        }
+
+        snappedSpawnPosition = _groundMap.GetCellCenterWorld(cellPosition);
+        snappedSpawnPosition.z = _zPosition;
+        return true;
     }
 
     void Update()
