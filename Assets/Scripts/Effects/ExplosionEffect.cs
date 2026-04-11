@@ -1,14 +1,16 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ExplosionEffect : MonoBehaviour
 {
-    public float duration = 1f; // Duration of the explosion effect
+    [FormerlySerializedAs("duration")]
+    public float Duration = 1f; // Duration of the explosion effect
 
     // Update is called once per frame
     void Update()
     {
-        duration -= Time.deltaTime;
-        if (duration <= 0f)
+        Duration -= Time.deltaTime;
+        if (Duration <= 0f)
         {
             Destroy(gameObject);
         }

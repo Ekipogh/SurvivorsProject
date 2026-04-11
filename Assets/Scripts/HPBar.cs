@@ -4,7 +4,7 @@ public class HPBar : MonoBehaviour
 {
     private Transform _target;
 
-    private float offsetY = 0.2f;
+    private float _offsetY = 0.2f;
 
     public Transform Target
     {
@@ -23,7 +23,7 @@ public class HPBar : MonoBehaviour
         // keep the HP bar above the target and facing the camera
         if (_target != null)
         {
-            transform.position = _target.position + Vector3.down * offsetY;
+            transform.position = _target.position + Vector3.down * _offsetY;
         }
         transform.rotation = Quaternion.identity;
     }

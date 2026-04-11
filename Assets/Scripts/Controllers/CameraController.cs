@@ -1,18 +1,21 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CameraController : MonoBehaviour
 {
-    public Camera mainCamera;
-    public Transform playerTransform;
+    [FormerlySerializedAs("mainCamera")]
+    public Camera MainCamera;
+    [FormerlySerializedAs("playerTransform")]
+    public Transform PlayerTransform;
 
     void FixedUpdate()
     {
-        if (playerTransform != null)
+        if (PlayerTransform != null)
         {
-            Vector3 desiredPosition = playerTransform.position;
-            desiredPosition.z = mainCamera.transform.position.z; // Keep the camera's z position unchanged
-            Vector3 smoothedPosition = Vector3.Lerp(mainCamera.transform.position, desiredPosition, Time.deltaTime * 5f);
-            mainCamera.transform.position = smoothedPosition;
+            Vector3 desiredPosition = PlayerTransform.position;
+            desiredPosition.z = MainCamera.transform.position.z; // Keep the camera's z position unchanged
+            Vector3 smoothedPosition = Vector3.Lerp(MainCamera.transform.position, desiredPosition, Time.deltaTime * 5f);
+            MainCamera.transform.position = smoothedPosition;
         }
     }
 }

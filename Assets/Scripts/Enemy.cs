@@ -1,12 +1,15 @@
 using System;
 using Microlight.MicroBar;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Enemy : GameCharacter
 {
-    public Player player;
+    [FormerlySerializedAs("player")]
+    public Player Player;
 
-    public EnemyStats enemyStats;
+    [FormerlySerializedAs("enemyStats")]
+    public EnemyStats EnemyStatsData;
 
     // States
     private bool _isDamagingPlayer = false;
@@ -15,22 +18,24 @@ public class Enemy : GameCharacter
     private float _damageCooldown = 1f; // damage cooldown time in seconds
     private float _damageTimer = 2f; // timer to track damage cooldown, start able to damage player
 
-    public Vector3 rotatation;
+    [FormerlySerializedAs("rotatation")]
+    public Vector3 Rotation;
 
-    public Transform sprite;
+    [FormerlySerializedAs("sprite")]
+    public Transform Sprite;
 
     void Update()
     {
         // Move towards the player
-        if (player != null && !_isDamagingPlayer)
+        if (Player != null && !_isDamagingPlayer)
         {
-            Vector2 direction = (player.transform.position - transform.position).normalized;
-            transform.position += stats.speed * Time.deltaTime * (Vector3)direction;
+            Vector2 direction = (Player.transform.position - transform.position).normalized;
+            transform.position += Stats.Speed * Time.deltaTime * (Vector3)direction;
             // rotate towards the player
-            Vector3 targetDirection = player.transform.position - transform.position;
+            Vector3 targetDirection = Player.transform.position - transform.position;
             float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg - 90f;
             Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            sprite.transform.rotation = Quaternion.RotateTowards(sprite.transform.rotation, rotation, stats.rotationSpeed * Time.deltaTime);
+            Sprite.transform.rotation = Quaternion.RotateTowards(Sprite.transform.rotation, rotation, Stats.RotationSpeed * Time.deltaTime);
         }
         DamagePlayer();
     }
@@ -54,18 +59,19 @@ public class Enemy : GameCharacter
     protected override void Die()
     {
         _isDead = true;
+        Player.RewardPoints(EnemyStatsData.PointsValue); // Reward points to the player for defeating this enemy
     }
 
     private void DamagePlayer()
     {
-        if (_isDamagingPlayer && player != null)
+        if (_isDamagingPlayer && Player != null)
         {
             // Check if the damage cooldown has elapsed
             _damageTimer += Time.deltaTime;
             if (_damageTimer >= _damageCooldown)
             {
                 // Deal damage to the player
-                player.TakeDamage(enemyStats.damage);
+                Player.TakeDamage(EnemyStatsData.Damage);
                 _damageTimer = 0f; // Reset the damage timer
             }
         }

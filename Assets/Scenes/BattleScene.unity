@@ -62264,6 +62264,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 19f485fa95d9aba4398b47a626cf8e41, type: 2}
     - target: {fileID: 6786984241821091461, guid: 90ee4e80f04eedd4cbed7fb179aad802, type: 3}
+      propertyPath: playerStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 9ea9095e7b3b17b41a06a303f5608543, type: 2}
+    - target: {fileID: 6786984241821091461, guid: 90ee4e80f04eedd4cbed7fb179aad802, type: 3}
+      propertyPath: characterStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 19f485fa95d9aba4398b47a626cf8e41, type: 2}
+    - target: {fileID: 6786984241821091461, guid: 90ee4e80f04eedd4cbed7fb179aad802, type: 3}
       propertyPath: weapons.Array.size
       value: 4
       objectReference: {fileID: 0}

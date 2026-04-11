@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Rocket : MonoBehaviour
 {
-    public GameObject explosionPrefab;
-    private float explosionRadius = 5f;
-    private float fuseTime = 3f;
+    [FormerlySerializedAs("explosionPrefab")]
+    public GameObject ExplosionPrefab;
+    private float _explosionRadius = 5f;
+    private float _fuseTime = 3f;
 
-    public List<Enemy> enemies;
+    [FormerlySerializedAs("enemies")]
+    public List<Enemy> Enemies;
 
     void OnTriggerEnter(Collider other)
     {
@@ -15,9 +18,9 @@ public class Rocket : MonoBehaviour
         if (other.CompareTag("Enemy") || other.CompareTag("CollidableObject"))
         {
             // spawn a explosion effect
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            Instantiate(ExplosionPrefab, transform.position, Quaternion.identity);
             // damage enemies in radius
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, _explosionRadius);
             foreach (var hitCollider in hitColliders)
             {
                 if (hitCollider.CompareTag("Enemy"))

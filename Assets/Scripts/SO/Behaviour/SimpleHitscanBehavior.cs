@@ -5,8 +5,8 @@ public class SimpleHitscanBehavior : WeaponBehaviour
 {
     public override void Shoot(Weapon weapon)
     {
-        float range = weapon.stats.range;
-        float damage = weapon.stats.damageModifier;
+        float range = weapon.Stats.Range;
+        float damage = weapon.Stats.DamageModifier;
 
         if (weapon.TargetEnemy == null) return;
 

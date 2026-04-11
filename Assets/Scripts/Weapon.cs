@@ -1,31 +1,37 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Weapon : MonoBehaviour
 {
     private const float MinDirectionSqrMagnitude = 0.0001f;
 
-    public WeaponStats stats;
-    public List<Enemy> enemyList = new();
+    [FormerlySerializedAs("stats")]
+    public WeaponStats Stats;
+    [FormerlySerializedAs("enemyList")]
+    public List<Enemy> EnemyList = new();
     private Enemy _targetEnemy; // The enemy currently targeted for attack
 
     private bool _hasLoggedMissingStats;
     private bool _hasLoggedMissingProjectileBehaviour;
     private bool _hasLoggedMissingFiringPoint;
 
-    private float attackTimer = 0f; // Timer to track attack cooldown
+    private float _attackTimer = 0f; // Timer to track attack cooldown
 
-    public WeaponBehaviour projectileBehaviour;
+    [FormerlySerializedAs("projectileBehaviour")]
+    public WeaponBehaviour ProjectileBehaviour;
 
-    public Transform firingPoint; // The point from which the projectile will be fired
+    [FormerlySerializedAs("firingPoint")]
+    public Transform FiringPoint; // The point from which the projectile will be fired
 
-    public Player player; // Reference to the player
+    [FormerlySerializedAs("player")]
+    public Player Player; // Reference to the player
 
-    public Vector3 ProjectileSpawnPosition => firingPoint != null ? firingPoint.position : transform.position;
+    public Vector3 ProjectileSpawnPosition => FiringPoint != null ? FiringPoint.position : transform.position;
 
-    public Quaternion ProjectileSpawnRotation => firingPoint != null ? firingPoint.rotation : transform.rotation;
+    public Quaternion ProjectileSpawnRotation => FiringPoint != null ? FiringPoint.rotation : transform.rotation;
 
-    public Vector2 AimDirection => firingPoint != null ? firingPoint.up : transform.up;
+    public Vector2 AimDirection => FiringPoint != null ? FiringPoint.up : transform.up;
 
     private void Update()
     {
@@ -50,7 +56,7 @@ public class Weapon : MonoBehaviour
     {
         bool hasAllReferences = true;
 
-        if (stats == null)
+        if (Stats == null)
         {
             if (!_hasLoggedMissingStats)
             {
@@ -60,7 +66,7 @@ public class Weapon : MonoBehaviour
             hasAllReferences = false;
         }
 
-        if (projectileBehaviour == null)
+        if (ProjectileBehaviour == null)
         {
             if (!_hasLoggedMissingProjectileBehaviour)
             {
@@ -70,7 +76,7 @@ public class Weapon : MonoBehaviour
             hasAllReferences = false;
         }
 
-        if (firingPoint == null)
+        if (FiringPoint == null)
         {
             if (!_hasLoggedMissingFiringPoint)
             {
@@ -85,17 +91,17 @@ public class Weapon : MonoBehaviour
 
     private void ChooseTarget()
     {
-        float halfAttackAngle = stats.attackAngle * 0.5f;
+        float halfAttackAngle = Stats.AttackAngle * 0.5f;
         if (IsTargetWithinAngleAndRange(_targetEnemy, halfAttackAngle))
         {
             return;
         }
 
         Enemy closestEnemy = null;
-        if (enemyList != null && enemyList.Count > 0)
+        if (EnemyList != null && EnemyList.Count > 0)
         {
             float closestDistance = Mathf.Infinity;
-            foreach (Enemy enemy in enemyList)
+            foreach (Enemy enemy in EnemyList)
             {
                 if (!IsTargetWithinAngleAndRange(enemy, halfAttackAngle))
                 {
@@ -119,17 +125,17 @@ public class Weapon : MonoBehaviour
         if (_targetEnemy == null)
         {
             // Reset the attack timer if no target is found
-            attackTimer = 0f;
+            _attackTimer = 0f;
             return;
         }
 
         // Check if the attack cooldown has elapsed
-        attackTimer += Time.deltaTime;
-        if (attackTimer >= stats.cooldownTime)
+        _attackTimer += Time.deltaTime;
+        if (_attackTimer >= Stats.CooldownTime)
         {
             Debug.Log("Attacking enemy: " + _targetEnemy.name);
-            projectileBehaviour.Shoot(this);
-            attackTimer = 0f; // Reset the attack timer
+            ProjectileBehaviour.Shoot(this);
+            _attackTimer = 0f; // Reset the attack timer
         }
     }
 
@@ -159,11 +165,11 @@ public class Weapon : MonoBehaviour
 
             float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg - 90f;
             Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, stats.rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Stats.RotationSpeed * Time.deltaTime);
 
             float distanceToTarget = targetDirection.magnitude;
             float angleToTarget = Vector2.Angle(AimDirection, targetDirection);
-            return distanceToTarget <= stats.range && angleToTarget <= stats.aimTolerance;
+            return distanceToTarget <= Stats.Range && angleToTarget <= Stats.AimTolerance;
         }
         return false; // No target to rotate towards
     }
@@ -175,7 +181,7 @@ public class Weapon : MonoBehaviour
 
     private Vector2 GetAimOrigin()
     {
-        return firingPoint != null ? firingPoint.position : transform.position;
+        return FiringPoint != null ? FiringPoint.position : transform.position;
     }
 
     private bool IsTargetWithinAngleAndRange(Enemy enemy, float halfAttackAngle)
@@ -192,7 +198,7 @@ public class Weapon : MonoBehaviour
         }
 
         float distance = directionToEnemy.magnitude;
-        if (distance > stats.range)
+        if (distance > Stats.Range)
         {
             return false;
         }

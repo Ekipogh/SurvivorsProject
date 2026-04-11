@@ -1,21 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 public class EnemyController : MonoBehaviour
 {
-    public Player player;
-    public Enemy enemyPrefab;
+    [FormerlySerializedAs("player")]
+    public Player Player;
+    [FormerlySerializedAs("enemyPrefab")]
+    public Enemy EnemyPrefab;
 
-    public GameObject mapGrid;
+    [FormerlySerializedAs("mapGrid")]
+    public GameObject MapGrid;
 
-    public int spawnInterval = 2; // Time interval between spawns in seconds
-    public int maxEnemies = 5; // Maximum number of enemies allowed in the scene
-    private const float _spawnRadius = 5f; // Radius around the player to spawn enemies
+    [FormerlySerializedAs("spawnInterval")]
+    public int SpawnInterval = 2; // Time interval between spawns in seconds
+    [FormerlySerializedAs("maxEnemies")]
+    public int MaxEnemies = 5; // Maximum number of enemies allowed in the scene
+    private const float SpawnRadius = 5f; // Radius around the player to spawn enemies
     private int _enemyId = 0; // Unique ID for each enemy
-    private const float _zPosition = -1f; // Fixed Z position for spawning enemies
-    private const int _maxSpawnAttempts = 20;
+    private const float ZPosition = -1f; // Fixed Z position for spawning enemies
+    private const int MaxSpawnAttempts = 20;
 
     private List<Enemy> _enemies = new List<Enemy>(); // List to keep track of spawned enemies
 
@@ -36,7 +42,7 @@ public class EnemyController : MonoBehaviour
 
         if (_groundMap == null)
         {
-            Debug.LogError("EnemyController could not find GroundMap under the assigned mapGrid.");
+            Debug.LogError("EnemyController could not find GroundMap under the assigned MapGrid.");
             enabled = false;
             return;
         }
@@ -46,13 +52,13 @@ public class EnemyController : MonoBehaviour
 
     private void CacheTilemaps()
     {
-        if (mapGrid == null)
+        if (MapGrid == null)
         {
-            Debug.LogError("EnemyController requires a mapGrid reference.");
+            Debug.LogError("EnemyController requires a MapGrid reference.");
             return;
         }
 
-        Tilemap[] tilemaps = mapGrid.GetComponentsInChildren<Tilemap>();
+        Tilemap[] tilemaps = MapGrid.GetComponentsInChildren<Tilemap>();
         foreach (Tilemap tilemap in tilemaps)
         {
             switch (tilemap.gameObject.name)
@@ -83,7 +89,7 @@ public class EnemyController : MonoBehaviour
         Vector3 center = (min + max) * 0.5f;
         Vector3 size = max - min;
 
-        center.z = _zPosition;
+        center.z = ZPosition;
         size.z = 0f;
 
         return new Bounds(center, size);
@@ -94,14 +100,14 @@ public class EnemyController : MonoBehaviour
         while (true)
         {
             // Check if the number of enemies is less than the maximum allowed
-            if (GameObject.FindGameObjectsWithTag("Enemy").Length < maxEnemies)
+            if (GameObject.FindGameObjectsWithTag("Enemy").Length < MaxEnemies)
             {
                 // Spawn a new enemy
                 SpawnEnemy();
             }
 
             // Wait for the specified spawn interval before spawning the next enemy
-            yield return new WaitForSeconds(spawnInterval);
+            yield return new WaitForSeconds(SpawnInterval);
         }
     }
 
@@ -116,10 +122,10 @@ public class EnemyController : MonoBehaviour
         }
 
         // Instantiate the enemy prefab at the spawn position with no rotation
-        Enemy newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        Enemy newEnemy = Instantiate(EnemyPrefab, spawnPosition, Quaternion.identity);
 
         // Set the enemy's target to the player
-        newEnemy.player = player;
+        newEnemy.Player = Player;
 
         // Set the enemy's tag to "Enemy" for identification
         newEnemy.gameObject.tag = "Enemy";
@@ -131,9 +137,9 @@ public class EnemyController : MonoBehaviour
 
     private bool TryGetSpawnPosition(out Vector3 spawnPosition)
     {
-        for (int attempt = 0; attempt < _maxSpawnAttempts; attempt++)
+        for (int attempt = 0; attempt < MaxSpawnAttempts; attempt++)
         {
-            Vector3 candidate = (Vector2)player.transform.position + Random.insideUnitCircle * _spawnRadius;
+            Vector3 candidate = (Vector2)Player.transform.position + Random.insideUnitCircle * SpawnRadius;
             candidate = ClampToSpawnBounds(candidate);
 
             if (!IsSpawnCellWalkable(candidate, out Vector3 snappedSpawnPosition))
@@ -156,7 +162,7 @@ public class EnemyController : MonoBehaviour
 
         position.x = Mathf.Clamp(position.x, min.x, max.x);
         position.y = Mathf.Clamp(position.y, min.y, max.y);
-        position.z = _zPosition;
+        position.z = ZPosition;
 
         return position;
     }
@@ -183,7 +189,7 @@ public class EnemyController : MonoBehaviour
         }
 
         snappedSpawnPosition = _groundMap.GetCellCenterWorld(cellPosition);
-        snappedSpawnPosition.z = _zPosition;
+        snappedSpawnPosition.z = ZPosition;
         return true;
     }
 
@@ -204,6 +210,6 @@ public class EnemyController : MonoBehaviour
             Destroy(deadEnemy.gameObject); // Destroy the enemy game object
         }
         // update player's enemies list
-        player.UpdateEnemyList(_enemies);
+        Player.UpdateEnemyList(_enemies);
     }
 }
