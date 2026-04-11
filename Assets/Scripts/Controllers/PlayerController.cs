@@ -1,25 +1,27 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
-    public Player player;
+    [FormerlySerializedAs("player")]
+    public Player Player;
     private bool _isGamepad = false;
 
     void OnMove(InputValue value)
     {
-        if (player == null)
+        if (Player == null)
         {
             return;
         }
 
         var moveInput = value.Get<Vector2>();
-        player.Move(moveInput);
+        Player.Move(moveInput);
     }
 
     void OnLook(InputValue value)
     {
-        if (player == null)
+        if (Player == null)
         {
             return;
         }
@@ -27,21 +29,21 @@ public class PlayerController : MonoBehaviour
         var lookInput = value.Get<Vector2>();
         if (_isGamepad)
         {
-            if (lookInput.sqrMagnitude > player.stats.lookInputDeadzone * player.stats.lookInputDeadzone)
+            if (lookInput.sqrMagnitude > Player.Stats.LookInputDeadzone * Player.Stats.LookInputDeadzone)
             {
-                player.LookTowards(lookInput);
+                Player.LookTowards(lookInput);
             }
         }
     }
 
     void OnRotate(InputValue value)
     {
-        if (player == null)
+        if (Player == null)
         {
             return;
         }
 
-        player.Rotate(value.Get<float>());
+        Player.Rotate(value.Get<float>());
     }
 
     void OnControlsChanged(PlayerInput playerInput)

@@ -1,12 +1,14 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "SimpleLazerGunBehavior", menuName = "Scriptable Objects/SimpleLazerGunBehavior")]
 public class SimpleLazerGunBehavior : WeaponBehaviour
 {
-    public Sprite lazerSprite; // Sprite for the laser
-    private const float laserWidth = 0.1f; // Width of the laser line
-    private readonly Color laserColor = Color.red; // Color of the laser
+    [FormerlySerializedAs("lazerSprite")]
+    public Sprite LaserSprite; // Sprite for the laser
+    private const float LaserWidth = 0.1f; // Width of the laser line
+    private readonly Color _laserColor = Color.red; // Color of the laser
     public override void Shoot(Weapon weapon)
     {
         if (weapon.TargetEnemy == null) return;
@@ -17,13 +19,13 @@ public class SimpleLazerGunBehavior : WeaponBehaviour
         lr.SetPosition(0, weapon.ProjectileSpawnPosition);
         lr.SetPosition(1, weapon.TargetEnemy.transform.position);
 
-        lr.startWidth = laserWidth;
-        lr.endWidth = laserWidth;
+        lr.startWidth = LaserWidth;
+        lr.endWidth = LaserWidth;
         lr.material = new Material(Shader.Find("Sprites/Default"));
-        lr.startColor = laserColor;
-        lr.endColor = laserColor;
+        lr.startColor = _laserColor;
+        lr.endColor = _laserColor;
 
-        var damage = weapon.stats.damageModifier;
+        var damage = weapon.Stats.DamageModifier;
         weapon.TargetEnemy.TakeDamage(damage);
 
         weapon.StartCoroutine(FadeOutLaser(laserGO, 0.2f));

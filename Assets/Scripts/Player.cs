@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Player : GameCharacter
 {
@@ -14,7 +15,11 @@ public class Player : GameCharacter
     private float _rotationInput;
     private bool _hasLookDirection;
 
-    public List<Weapon> weapons = new List<Weapon>();
+    [FormerlySerializedAs("playerStats")]
+    public PlayerStats PlayerStatsData;
+
+    [FormerlySerializedAs("weapons")]
+    public List<Weapon> Weapons = new();
 
     public Rigidbody2D Rb
     {
@@ -37,6 +42,11 @@ public class Player : GameCharacter
         _rotationInput = 0f;
         _hasLookDirection = false;
         base.Awake();
+
+        // reset points to 0 at the start of the game
+        if (PlayerStatsData != null)        {
+            PlayerStatsData.CurrentPoints = 0f;
+        }
     }
 
     public void Move(Vector2 direction)
@@ -46,7 +56,7 @@ public class Player : GameCharacter
 
     public void LookTowards(Vector2 direction)
     {
-        if (direction.sqrMagnitude <= stats.lookInputDeadzone * stats.lookInputDeadzone)
+        if (direction.sqrMagnitude <= Stats.LookInputDeadzone * Stats.LookInputDeadzone)
         {
             return;
         }
@@ -69,7 +79,7 @@ public class Player : GameCharacter
     private void MovePlayer()
     {
         Vector2 desiredInput = _moveInput;
-        if (desiredInput.sqrMagnitude <= stats.moveInputDeadzone * stats.moveInputDeadzone)
+        if (desiredInput.sqrMagnitude <= Stats.MoveInputDeadzone * Stats.MoveInputDeadzone)
         {
             desiredInput = Vector2.zero;
         }
@@ -80,7 +90,7 @@ public class Player : GameCharacter
 
         float modifiedSpeed = GetModifiedSpeed();
         Vector2 targetVelocity = desiredInput * modifiedSpeed;
-        float acceleration = desiredInput == Vector2.zero ? stats.deceleration : stats.acceleration;
+        float acceleration = desiredInput == Vector2.zero ? Stats.Deceleration : Stats.Acceleration;
         _currentVelocity = Vector2.MoveTowards(_currentVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
 
         if (_currentVelocity.sqrMagnitude <= 0.0001f)
@@ -95,7 +105,7 @@ public class Player : GameCharacter
     {
         if (!Mathf.Approximately(_rotationInput, 0f))
         {
-            float nextAngle = Rb.rotation - _rotationInput * stats.rotationSpeed * Time.fixedDeltaTime;
+            float nextAngle = Rb.rotation - _rotationInput * Stats.RotationSpeed * Time.fixedDeltaTime;
             Rb.MoveRotation(nextAngle);
             return;
         }
@@ -103,7 +113,7 @@ public class Player : GameCharacter
         if (_hasLookDirection)
         {
             float angle = Mathf.Atan2(_lookDirection.y, _lookDirection.x) * Mathf.Rad2Deg - 90f;
-            float nextAngle = Mathf.MoveTowardsAngle(Rb.rotation, angle, stats.rotationSpeed * Time.fixedDeltaTime);
+            float nextAngle = Mathf.MoveTowardsAngle(Rb.rotation, angle, Stats.RotationSpeed * Time.fixedDeltaTime);
             Rb.MoveRotation(nextAngle);
         }
     }
@@ -159,15 +169,15 @@ public class Player : GameCharacter
 
     public void UpdateEnemyList(List<Enemy> enemyList)
     {
-        foreach (Weapon weapon in weapons)
+        foreach (Weapon weapon in Weapons)
         {
-            weapon.enemyList = enemyList;
+            weapon.EnemyList = enemyList;
         }
     }
 
     private float GetModifiedSpeed()
     {
-        float speed = Mathf.Max(0f, stats.speed);
+        float speed = Mathf.Max(0f, Stats.Speed);
 
         foreach (float bonus in _speedBonuses.Values)
         {
@@ -180,5 +190,10 @@ public class Player : GameCharacter
         }
 
         return Mathf.Max(0f, speed);
+    }
+
+    public void RewardPoints(float points)
+    {
+        PlayerStatsData.CurrentPoints += points;
     }
 }
