@@ -125,7 +125,6 @@ public class Weapon : MonoBehaviour
         _attackTimer += Time.deltaTime;
         if (_attackTimer >= Stats.CooldownTime)
         {
-            Debug.Log("Attacking enemy: " + _targetEnemy.name);
             ProjectileBehaviour.Shoot(this);
             _attackTimer = 0f; // Reset the attack timer
         }

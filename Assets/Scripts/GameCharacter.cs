@@ -10,6 +10,12 @@ public abstract class GameCharacter : MonoBehaviour
 
     protected virtual void Awake()
     {
+        if (Stats == null)
+        {
+            Debug.LogError("CharacterStats is not assigned for " + gameObject.name);
+            return;
+        }
+        Stats = Instantiate(Stats); // Create a unique instance of the stats for this character
         Stats.CurrentHealth = Stats.MaxHealth;
         // spawn the health bar
         HPBar hpBarPrefab = Resources.Load<HPBar>("Prefabs/HPBar");
@@ -44,6 +50,10 @@ public abstract class GameCharacter : MonoBehaviour
         if (_hpBarInstance != null)
         {
             Destroy(_hpBarInstance.gameObject);
+        }
+        if (Stats != null)
+        {
+            Destroy(Stats); // Clean up the stats instance when the character is destroyed
         }
     }
 
