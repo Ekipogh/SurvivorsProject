@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb104333702b8a4e8bb56272824da8c, type: 3}
   m_Name: SimpleRocketStats
   m_EditorClassIdentifier: Assembly-CSharp::WeaponStats
-  damageModifier: 50
-  rotationSpeed: 50
-  range: 10
-  attackAngle: 45
-  cooldownTime: 1
-  projectileSpeed: 2
-  aoeRadius: 2
+  DamageModifier: 30
+  RotationSpeed: 50
+  Range: 5
+  AttackAngle: 45
+  AimTolerance: 6
+  CooldownTime: 1
+  ProjectileSpeed: 5
+  AoeRadius: 5

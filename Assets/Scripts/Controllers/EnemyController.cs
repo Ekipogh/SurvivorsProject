@@ -6,17 +6,11 @@ using UnityEngine.Tilemaps;
 
 public class EnemyController : MonoBehaviour
 {
-    [FormerlySerializedAs("player")]
     public Player Player;
-    [FormerlySerializedAs("enemyPrefab")]
     public Enemy EnemyPrefab;
 
-    [FormerlySerializedAs("mapGrid")]
     public GameObject MapGrid;
-
-    [FormerlySerializedAs("spawnInterval")]
     public int SpawnInterval = 2; // Time interval between spawns in seconds
-    [FormerlySerializedAs("maxEnemies")]
     public int MaxEnemies = 5; // Maximum number of enemies allowed in the scene
     private const float SpawnRadius = 5f; // Radius around the player to spawn enemies
     private int _enemyId = 0; // Unique ID for each enemy

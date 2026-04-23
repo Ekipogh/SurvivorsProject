@@ -6,9 +6,7 @@ public class Weapon : MonoBehaviour
 {
     private const float MinDirectionSqrMagnitude = 0.0001f;
 
-    [FormerlySerializedAs("stats")]
     public WeaponStats Stats;
-    [FormerlySerializedAs("enemyList")]
     public List<Enemy> EnemyList = new();
     private Enemy _targetEnemy; // The enemy currently targeted for attack
 
@@ -17,14 +15,8 @@ public class Weapon : MonoBehaviour
     private bool _hasLoggedMissingFiringPoint;
 
     private float _attackTimer = 0f; // Timer to track attack cooldown
-
-    [FormerlySerializedAs("projectileBehaviour")]
     public WeaponBehaviour ProjectileBehaviour;
-
-    [FormerlySerializedAs("firingPoint")]
     public Transform FiringPoint; // The point from which the projectile will be fired
-
-    [FormerlySerializedAs("player")]
     public Player Player; // Reference to the player
 
     public Vector3 ProjectileSpawnPosition => FiringPoint != null ? FiringPoint.position : transform.position;

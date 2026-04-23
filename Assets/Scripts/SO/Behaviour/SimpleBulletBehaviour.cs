@@ -4,7 +4,6 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "SimpleBulletBehaviour", menuName = "Scriptable Objects/SimpleBulletBehaviour")]
 public class SimpleBulletBehaviour : WeaponBehaviour
 {
-    [FormerlySerializedAs("bulletPrefab")]
     public GameObject BulletPrefab; // Prefab of the bullet to be instantiated
 
     public override void Shoot(Weapon weapon)

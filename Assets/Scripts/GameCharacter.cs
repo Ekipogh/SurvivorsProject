@@ -3,7 +3,6 @@ using UnityEngine.Serialization;
 
 public abstract class GameCharacter : MonoBehaviour
 {
-    [FormerlySerializedAs("characterStats")]
     public CharacterStats Stats;
     private Microlight.MicroBar.MicroBar _healthBar; // Reference to the health bar
 

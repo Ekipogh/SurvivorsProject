@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba19689aeea172b498f34057470495df, type: 3}
   m_Name: SimpleBulletBehaviour
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 4037038693580476308, guid: 00b34185bb03e7d4290c6ef8368fe324, type: 3}
+  BulletPrefab: {fileID: 4037038693580476308, guid: 00b34185bb03e7d4290c6ef8368fe324, type: 3}
