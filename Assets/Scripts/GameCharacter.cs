@@ -10,6 +10,7 @@ public abstract class GameCharacter : MonoBehaviour
 
     protected virtual void Awake()
     {
+        Stats = Instantiate(Stats); // Create a unique instance of the stats for this character
         Stats.CurrentHealth = Stats.MaxHealth;
         // spawn the health bar
         HPBar hpBarPrefab = Resources.Load<HPBar>("Prefabs/HPBar");
