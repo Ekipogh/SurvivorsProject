@@ -15,10 +15,8 @@ public class Player : GameCharacter
     private float _rotationInput;
     private bool _hasLookDirection;
 
-    [FormerlySerializedAs("playerStats")]
     public PlayerStats PlayerStatsData;
 
-    [FormerlySerializedAs("weapons")]
     public List<Weapon> Weapons = new();
 
     public Rigidbody2D Rb

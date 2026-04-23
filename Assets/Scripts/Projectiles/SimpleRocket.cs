@@ -3,18 +3,12 @@ using UnityEngine.Serialization;
 
 public class SimpleHommingRocket : MonoBehaviour
 {
-    [FormerlySerializedAs("target")]
     public Transform Target; // The target the rocket will follow
-    [FormerlySerializedAs("speed")]
     public float Speed = 5f; // Speed of the rocket
-    [FormerlySerializedAs("rotationSpeed")]
     public float RotationSpeed = 200f; // Rotation speed of the rocket
-    [FormerlySerializedAs("damage")]
     public float Damage = 20f; // Damage dealt by the rocket
-    [FormerlySerializedAs("explosionRadius")]
     public float ExplosionRadius = 2f; // Radius of the explosion effect
 
-    [FormerlySerializedAs("explosionEffect")]
     public GameObject ExplosionEffect; // Prefab for explosion effect
 
     void OnTriggerEnter2D(Collider2D collision)

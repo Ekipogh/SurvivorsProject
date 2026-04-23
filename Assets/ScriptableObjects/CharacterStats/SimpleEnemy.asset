@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d16bb27408a67f48914234b873e8901, type: 3}
   m_Name: SimpleEnemy
   m_EditorClassIdentifier: 
-  speed: 2.5
-  rotationSpeed: 100
-  maxHealth: 100
+  Speed: 2.5
+  Acceleration: 30
+  Deceleration: 40
+  MoveInputDeadzone: 0.1
+  LookInputDeadzone: 0.1
+  RotationSpeed: 300
+  MaxHealth: 50
+  CurrentHealth: 50

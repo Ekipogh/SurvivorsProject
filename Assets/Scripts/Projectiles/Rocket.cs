@@ -1,15 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Rocket : MonoBehaviour
 {
-    [FormerlySerializedAs("explosionPrefab")]
     public GameObject ExplosionPrefab;
     private float _explosionRadius = 5f;
     private float _fuseTime = 3f;
 
-    [FormerlySerializedAs("enemies")]
     public List<Enemy> Enemies;
 
     void OnTriggerEnter(Collider other)

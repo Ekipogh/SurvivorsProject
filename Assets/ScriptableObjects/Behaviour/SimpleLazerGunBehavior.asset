@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb16a3de02d1c99449c2763bfa37a775, type: 3}
   m_Name: SimpleLazerGunBehavior
   m_EditorClassIdentifier: 
-  lazerSprite: {fileID: 21300000, guid: ea73e5a3ed1366a428c2ee096381f77e, type: 3}
+  LaserSprite: {fileID: 21300000, guid: ea73e5a3ed1366a428c2ee096381f77e, type: 3}

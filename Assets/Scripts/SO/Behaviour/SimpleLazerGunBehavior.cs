@@ -5,7 +5,6 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "SimpleLazerGunBehavior", menuName = "Scriptable Objects/SimpleLazerGunBehavior")]
 public class SimpleLazerGunBehavior : WeaponBehaviour
 {
-    [FormerlySerializedAs("lazerSprite")]
     public Sprite LaserSprite; // Sprite for the laser
     private const float LaserWidth = 0.1f; // Width of the laser line
     private readonly Color _laserColor = Color.red; // Color of the laser

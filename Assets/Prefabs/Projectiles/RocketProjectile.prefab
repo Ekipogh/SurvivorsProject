@@ -106,12 +106,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ef5af100d0fc840b4a8c8496c99e8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SimpleRocket
-  target: {fileID: 0}
-  speed: 5
-  rotationSpeed: 200
-  damage: 20
-  explosionRadius: 2
-  explosionEffect: {fileID: 8333436656471337742, guid: 61b4fd6d745b67949b3d2199e08a8dee, type: 3}
+  Target: {fileID: 0}
+  Speed: 5
+  RotationSpeed: 200
+  Damage: 20
+  ExplosionRadius: 2
+  ExplosionEffect: {fileID: 8333436656471337742, guid: 61b4fd6d745b67949b3d2199e08a8dee, type: 3}
 --- !u!50 &-178970145747960755
 Rigidbody2D:
   serializedVersion: 5

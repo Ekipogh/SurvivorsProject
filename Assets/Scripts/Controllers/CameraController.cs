@@ -3,9 +3,7 @@ using UnityEngine.Serialization;
 
 public class CameraController : MonoBehaviour
 {
-    [FormerlySerializedAs("mainCamera")]
     public Camera MainCamera;
-    [FormerlySerializedAs("playerTransform")]
     public Transform PlayerTransform;
 
     void FixedUpdate()

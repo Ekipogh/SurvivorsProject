@@ -5,10 +5,8 @@ using UnityEngine.Serialization;
 
 public class Enemy : GameCharacter
 {
-    [FormerlySerializedAs("player")]
     public Player Player;
 
-    [FormerlySerializedAs("enemyStats")]
     public EnemyStats EnemyStatsData;
 
     // States
@@ -18,10 +16,8 @@ public class Enemy : GameCharacter
     private float _damageCooldown = 1f; // damage cooldown time in seconds
     private float _damageTimer = 2f; // timer to track damage cooldown, start able to damage player
 
-    [FormerlySerializedAs("rotatation")]
     public Vector3 Rotation;
 
-    [FormerlySerializedAs("sprite")]
     public Transform Sprite;
 
     void Update()

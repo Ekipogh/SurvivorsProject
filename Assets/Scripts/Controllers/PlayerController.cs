@@ -4,7 +4,6 @@ using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
-    [FormerlySerializedAs("player")]
     public Player Player;
     private bool _isGamepad = false;
 

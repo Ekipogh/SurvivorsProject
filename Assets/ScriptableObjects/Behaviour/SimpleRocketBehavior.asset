@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ae54288cddb146438cc096d8058055c, type: 3}
   m_Name: SimpleRocketBehavior
   m_EditorClassIdentifier: Assembly-CSharp::SimpleRocketBehavior
-  rocketPrefab: {fileID: 3422518159979349821, guid: 064af40a48d6ff34ba60d8bf2df10f8a, type: 3}
+  RocketPrefab: {fileID: 3422518159979349821, guid: 064af40a48d6ff34ba60d8bf2df10f8a, type: 3}
