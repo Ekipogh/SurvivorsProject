@@ -12,4 +12,5 @@ public class WeaponStats : ScriptableObject
     public float CooldownTime = 1f; // Cooldown time between attacks
     public float ProjectileSpeed = 20f; // Speed of the projectile
     public float AoeRadius = 2f; // Radius of area of effect for explosive weapons
+    public int MaxPenetrations = -1; // Maximum enemies to penetrate through (-1 for unlimited)
 }
