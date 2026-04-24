@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7eb104333702b8a4e8bb56272824da8c, type: 3}
   m_Name: SimpleLazerStats
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   DamageModifier: 15
   RotationSpeed: 50
   Range: 15
@@ -20,3 +20,4 @@ MonoBehaviour:
   CooldownTime: 1
   ProjectileSpeed: 20
   AoeRadius: 2
+  MaxPenetrations: -1
