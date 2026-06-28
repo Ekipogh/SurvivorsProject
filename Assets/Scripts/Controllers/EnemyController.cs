@@ -117,6 +117,8 @@ public class EnemyController : MonoBehaviour
 
         // Instantiate the enemy prefab at the spawn position with no rotation
         Enemy newEnemy = Instantiate(EnemyPrefab, spawnPosition, Quaternion.identity);
+        // Set the enemy layer to "Enemy" for proper collision and interaction
+        newEnemy.gameObject.layer = LayerMask.NameToLayer("Enemy");
 
         // Set the enemy's target to the player
         newEnemy.Player = Player;

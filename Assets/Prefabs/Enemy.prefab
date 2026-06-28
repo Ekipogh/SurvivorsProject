@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2742170942854166492}
   - component: {fileID: 595868211866122173}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 4917369932146046122}
   - component: {fileID: 4348489072293277239}
   - component: {fileID: 3729039037667633205}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -194,7 +194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6949841045885978140}
   - component: {fileID: 6898923526559788478}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
