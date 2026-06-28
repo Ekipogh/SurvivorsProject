@@ -12,6 +12,35 @@ public class SimpleLazerGunBehavior : WeaponBehaviour
     {
         if (weapon.TargetEnemy == null) return;
 
+        float range = weapon.Stats.Range;
+        float damage = weapon.Stats.DamageModifier;
+        int maxPenetrations = weapon.Stats.MaxPenetrations;
+
+        // Perform raycast from firing point in aim direction
+        RaycastHit2D[] hits = Physics2D.RaycastAll(weapon.ProjectileSpawnPosition, weapon.AimDirection, range);
+
+        // Track which enemies have been damaged to apply penetration limit
+        int penetrationCount = 0;
+        foreach (RaycastHit2D hit in hits)
+        {
+            // Check if we've exceeded penetration limit
+            if (maxPenetrations >= 0 && penetrationCount >= maxPenetrations)
+            {
+                break;
+            }
+
+            // Check if the hit collider is an enemy
+            if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+            {
+                if (hit.collider.TryGetComponent<Enemy>(out var enemy))
+                {
+                    enemy.TakeDamage(damage);
+                    penetrationCount++;
+                }
+            }
+        }
+
+        // Draw visual laser line from firing point to target position
         GameObject laserGO = new("LaserLine");
         LineRenderer lr = laserGO.AddComponent<LineRenderer>();
         lr.positionCount = 2;
@@ -24,11 +53,7 @@ public class SimpleLazerGunBehavior : WeaponBehaviour
         lr.startColor = _laserColor;
         lr.endColor = _laserColor;
 
-        var damage = weapon.Stats.DamageModifier;
-        weapon.TargetEnemy.TakeDamage(damage);
-
         weapon.StartCoroutine(FadeOutLaser(laserGO, 0.2f));
-
     }
 
     private IEnumerator FadeOutLaser(GameObject laserGO, float duration)
