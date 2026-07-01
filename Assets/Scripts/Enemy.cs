@@ -20,6 +20,8 @@ public class Enemy : GameCharacter
 
     public Transform Sprite;
 
+    public EnemyController EnemyController{ get; set; }
+
     void Update()
     {
         // Move towards the player
@@ -54,8 +56,10 @@ public class Enemy : GameCharacter
 
     protected override void Die()
     {
+        if (_isDead) return; // Prevent multiple death triggers
         _isDead = true;
         Player.RewardPoints(EnemyStatsData.PointsValue); // Reward points to the player for defeating this enemy
+        EnemyController?.IncrementKillCount(); // Notify the EnemyController that this enemy has been killed
     }
 
     private void DamagePlayer()
