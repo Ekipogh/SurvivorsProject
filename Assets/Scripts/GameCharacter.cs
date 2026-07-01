@@ -34,6 +34,7 @@ public abstract class GameCharacter : MonoBehaviour
     public virtual void TakeDamage(float damage)
     {
         Stats.CurrentHealth -= damage;
+        Stats.CurrentHealth = Mathf.Clamp(Stats.CurrentHealth, 0, Stats.MaxHealth); // Ensure health doesn't go below 0 or above max
         if (Stats.CurrentHealth <= 0)
         {
             Die();

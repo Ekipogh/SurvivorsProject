@@ -13,21 +13,62 @@ public class GameStageManager : MonoBehaviour
 
     public GameStage CurrentGameStage { get; private set; }
 
+    [SerializeField] BuildManager buildManager;
+    [SerializeField] Transform gameOverUI;
+    [SerializeField] EnemyController enemyController;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else
+
+        Instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
         {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            Instance = null;
+        }
+    }
+
+
+    private void Start()
+    {
+        // Initialize the game stage to Build at the start of the game
+        SetGameStage(GameStage.Battle);
+    }
+
+    private void UpdateObjectsForCurrentStage()
+    {
+        switch (CurrentGameStage)
+        {
+            case GameStage.Battle:
+                buildManager.EnableBuildingMode(false);
+                enemyController.StartBattleStage();
+                break;
+            case GameStage.Build:
+                buildManager.EnableBuildingMode(true);
+                enemyController.StopBattleStage();
+                break;
+            case GameStage.GameOver:
+                if (gameOverUI != null)
+                {
+                    gameOverUI.gameObject.SetActive(true);
+                }
+                enemyController.StopBattleStage();
+                buildManager.EnableBuildingMode(false);
+                break;
         }
     }
 
     public void SetGameStage(GameStage newStage)
     {
         CurrentGameStage = newStage;
+        UpdateObjectsForCurrentStage();
     }
 }

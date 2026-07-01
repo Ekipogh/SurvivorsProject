@@ -13,6 +13,7 @@ public class EnemyController : MonoBehaviour
     public int SpawnInterval = 2; // Time interval between spawns in seconds
     public int MaxEnemies = 5; // Maximum number of enemies allowed in the scene
     private int _killCount = 0; // Count of enemies killed by the player
+    [SerializeField] private int _requiredKillCount = 10; // Required kill count to end the battle stage
     private const float SpawnRadius = 5f; // Radius around the player to spawn enemies
     private int _enemyId = 0; // Unique ID for each enemy
     private const float ZPosition = -1f; // Fixed Z position for spawning enemies
@@ -25,11 +26,7 @@ public class EnemyController : MonoBehaviour
     private Tilemap _objectsMap;
     private Bounds _spawnBounds;
 
-    void Start()
-    {
-        // Start the enemy spawn coroutine
-        StartCoroutine(SpawnEnemies());
-    }
+    Coroutine _spawnCoroutine;
 
     void Awake()
     {
@@ -92,8 +89,17 @@ public class EnemyController : MonoBehaviour
 
     private IEnumerator SpawnEnemies()
     {
-        while (_killCount < MaxEnemies)
+        while (true)
         {
+            if (_enemies.Count >= MaxEnemies)
+            {
+                yield return null; // Wait for the next frame and check again
+                continue;
+            }
+            if (_killCount >= _requiredKillCount)
+            {
+                break; // Exit the loop if the required kill count is reached
+            }
             SpawnEnemy();
             // Wait for the specified spawn interval before spawning the next enemy
             yield return new WaitForSeconds(SpawnInterval);
@@ -215,5 +221,30 @@ public class EnemyController : MonoBehaviour
     public void IncrementKillCount()
     {
         _killCount++;
+    }
+
+    public void StartBattleStage()
+    {
+        _killCount = 0; // Reset the kill count at the start of the battle stage
+        if (_spawnCoroutine != null)
+        {
+            StopCoroutine(_spawnCoroutine); // Stop any existing spawn coroutine
+        }
+        _spawnCoroutine = StartCoroutine(SpawnEnemies());
+    }
+
+    public void StopBattleStage()
+    {
+        if (_spawnCoroutine != null)
+        {
+            StopCoroutine(_spawnCoroutine); // Stop the spawn coroutine
+            _spawnCoroutine = null;
+        }
+        // clear the rest of the enemies in the scene
+        foreach (Enemy enemy in _enemies)
+        {
+            Destroy(enemy.gameObject);
+        }
+        _enemies.Clear(); // Clear the list of enemies
     }
 }
