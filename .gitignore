@@ -76,3 +76,4 @@ crashlytics-build.properties
 
 Thirdparty/
 Assets/Plugins/Demigiant/
+.DS_Store

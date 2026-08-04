@@ -1,0 +1,89 @@
+#PointsField {
+    align-self: flex-start;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 90px;
+    min-width: 82px;
+    max-width: 150px;
+    height: 36px;
+    min-height: 36px;
+    max-height: 36px;
+    margin-top: 5px;
+    margin-right: 14px;
+    padding: 3px 7px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(255, 224, 128, 0.75);
+    border-right-color: rgba(146, 91, 28, 0.85);
+    border-bottom-color: rgba(93, 56, 20, 0.95);
+    border-left-color: rgba(255, 224, 128, 0.75);
+    background-color: rgba(21, 18, 14, 0.82);
+    color: rgb(255, 235, 169);
+    -unity-font-style: bold;
+    font-size: 15px;
+    -unity-text-align: upper-left;
+    white-space: nowrap;
+}
+
+#PointsField .unity-base-field__label {
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 0;
+    width: 28px;
+    height: 28px;
+    min-height: 28px;
+    margin-left: 0;
+    margin-right: 4px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: rgb(255, 211, 86);
+    font-size: 15px;
+    -unity-text-align: middle-left;
+    align-items: center;
+}
+
+#PointsField .unity-base-field__input {
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 36px;
+    width: 36px;
+    height: 28px;
+    min-height: 28px;
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 245, 208);
+    -unity-text-align: upper-left;
+    font-size: 15px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#PointsField .unity-text-input {
+    height: 28px;
+    min-height: 28px;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: rgb(255, 245, 208);
+    -unity-font-style: bold;
+    -unity-text-align: middle-right;
+}
