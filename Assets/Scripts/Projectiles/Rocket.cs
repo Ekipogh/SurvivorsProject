@@ -5,7 +5,6 @@ public class Rocket : MonoBehaviour
 {
     public GameObject ExplosionPrefab;
     private float _explosionRadius = 5f;
-    private float _fuseTime = 3f;
 
     public List<Enemy> Enemies;
 

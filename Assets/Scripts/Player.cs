@@ -162,7 +162,7 @@ public class Player : GameCharacter
 
     protected override void Die()
     {
-        Debug.Log("Player has died.");
+        GameStageManager.Instance.SetGameStage(GameStage.GameOver);
     }
 
     public void UpdateEnemyList(List<Enemy> enemyList)

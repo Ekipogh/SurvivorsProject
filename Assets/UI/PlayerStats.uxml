@@ -1,5 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:IntegerField label="🪙" value="42" name="HealthField" data-source="project://database/Assets/ScriptableObjects/PlayerStats/PlayerStats.asset?fileID=11400000&amp;guid=9ea9095e7b3b17b41a06a303f5608543&amp;type=2#PlayerStats" data-source-path="CurrentPoints" enabled="true" focusable="false" readonly="true" style="align-items: auto; justify-content: flex-end; flex-direction: row; width: auto; -unity-text-align: upper-right; align-self: flex-end; white-space: nowrap; visibility: visible; overflow: hidden;">
+    <Style src="project://database/Assets/USS/PlayerStats.uss?fileID=7433441132597879392&amp;guid=0acc343d48b684a0c81f1faca69e2115&amp;type=3#PlayerStats"/>
+    <ui:IntegerField label="🪙" value="42" name="PointsField" data-source="project://database/Assets/ScriptableObjects/PlayerStats/PlayerStats.asset?fileID=11400000&amp;guid=9ea9095e7b3b17b41a06a303f5608543&amp;type=2#PlayerStats" data-source-path="CurrentPoints" enabled="true" focusable="false" readonly="true" hide-placeholder-on-focus="false" class="points-field" style="flex-direction: row; flex-wrap: nowrap; align-items: center; height: 36px; justify-content: flex-start; align-self: flex-end; align-content: stretch;">
         <Bindings>
             <ui:DataBinding property="value" binding-mode="ToTarget"/>
         </Bindings>

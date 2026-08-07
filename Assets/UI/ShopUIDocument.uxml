@@ -1,0 +1,23 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/USS/ShopUI.uss?fileID=7433441132597879392&amp;guid=8c1a42254c5e4dd4aa4b8e9968853f21&amp;type=3#ShopUI"/>
+    <ui:VisualElement name="BuildShop" class="shop-screen">
+        <ui:VisualElement class="shop-panel">
+            <ui:Label text="Shop" name="ShopTitle" class="shop-title"/>
+            <ui:Label text="Choose a temporary stub option to continue." name="ShopSubtitle" class="shop-subtitle"/>
+            <ui:VisualElement name="ShopOptions" class="shop-options">
+                <ui:Button name="ShopOptionA" class="shop-option">
+                    <ui:VisualElement class="shop-option-image shop-option-image-a"/>
+                    <ui:Label text="Stub Option 1" class="shop-option-label"/>
+                </ui:Button>
+                <ui:Button name="ShopOptionB" class="shop-option">
+                    <ui:VisualElement class="shop-option-image shop-option-image-b"/>
+                    <ui:Label text="Stub Option 2" class="shop-option-label"/>
+                </ui:Button>
+                <ui:Button name="ShopOptionC" class="shop-option">
+                    <ui:VisualElement class="shop-option-image shop-option-image-c"/>
+                    <ui:Label text="Stub Option 3" class="shop-option-label"/>
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
