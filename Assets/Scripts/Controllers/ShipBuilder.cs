@@ -5,13 +5,32 @@ public class ShipBuilder : MonoBehaviour
 {
     [SerializeField] private Player player;
     [SerializeField] private GameObject baseBlockPrefab;
+    [SerializeField] private GameObject baseBlockPreviewPrefab;
 
-    private readonly float blockSize = 64f; // Size of each block in pixels
+    private bool _isBuildingMode;
+    private bool _isPlacingBlock;
+
     private readonly Dictionary<Vector2Int, ShipBlock> shipBlocks = new();
+
+    private GameObject _currentPreviewBlock;
 
     void Start()
     {
         InitShip();
+        InitPreviewBlock();
+    }
+
+    void Update()
+    {
+        if (_isBuildingMode)
+        {
+            UpdatePreview();
+            if (Input.GetMouseButtonDown(0)) // Left mouse button
+            {
+                Vector2Int gridPosition = GetGridPositionFromMouse();
+                PlaceBlock(gridPosition);
+            }
+        }
     }
 
     public void InitShip()
@@ -25,18 +44,117 @@ public class ShipBuilder : MonoBehaviour
         PlaceBlock(Vector2Int.zero);
     }
 
+    private void InitPreviewBlock()
+    {
+        if (_currentPreviewBlock == null)
+        {
+            _currentPreviewBlock = Instantiate(baseBlockPreviewPrefab, player.transform);
+            _currentPreviewBlock.SetActive(false);
+        }
+    }
+
     private void PlaceBlock(Vector2Int gridPosition)
     {
-        if (shipBlocks.ContainsKey(gridPosition))
+        if (!IsValidPlacement(gridPosition))
         {
-            Debug.LogWarning($"Block already exists at {gridPosition}");
+            Debug.LogWarning($"Invalid placement at {gridPosition}");
             return;
         }
 
         GameObject newBlock = Instantiate(baseBlockPrefab, player.transform);
-        newBlock.transform.localPosition = new Vector3(gridPosition.x * blockSize, gridPosition.y * blockSize, 0);
+        newBlock.transform.localPosition = new Vector3(gridPosition.x, gridPosition.y, 0);
         ShipBlock shipBlockComponent = newBlock.GetComponent<ShipBlock>();
         shipBlockComponent.Initialize(gridPosition);
         shipBlocks.Add(gridPosition, shipBlockComponent);
+    }
+
+    public void BeginBuildMode()
+    {
+        // Implement logic to begin build mode
+        Debug.Log("Build mode started.");
+        _isBuildingMode = true;
+    }
+
+    public void EndBuildMode()
+    {
+        // Implement logic to end build mode
+        Debug.Log("Build mode ended.");
+        _isBuildingMode = false;
+        _currentPreviewBlock?.SetActive(false);
+        _isPlacingBlock = false;
+    }
+
+    public void BeginPlacingBlock()
+    {
+        if (!_isBuildingMode)
+        {
+            Debug.LogWarning("Cannot place block when not in build mode.");
+            return;
+        }
+        _isPlacingBlock = true;
+        _currentPreviewBlock?.SetActive(true);
+    }
+
+    private void UpdatePreview()
+    {
+        if (_isBuildingMode && _isPlacingBlock)
+        {
+            Vector2Int gridPosition = GetGridPositionFromMouse();
+            if (!shipBlocks.ContainsKey(gridPosition))
+            {
+                // Show preview of the block at the grid position
+                // You can instantiate a preview prefab or change the color of the block to indicate placement  
+                _currentPreviewBlock ??= Instantiate(baseBlockPreviewPrefab, player.transform);
+                _currentPreviewBlock.transform.localPosition = new Vector3(gridPosition.x, gridPosition.y, 0);
+            }
+        }
+    }
+
+    private Vector2Int GetGridPositionFromMouse()
+    {
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogWarning("Main camera not found for grid position calculation.");
+            return Vector2Int.zero;
+        }
+
+        Vector3 mouseScreenPosition = Input.mousePosition;
+
+        // Project the cursor onto the player's Z plane so perspective cameras produce stable results.
+        mouseScreenPosition.z = Mathf.Abs(mainCamera.transform.position.z - player.transform.position.z);
+        Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
+
+        // Blocks are placed in player-local space, so convert world position to local before snapping.
+        Vector3 mouseLocalPosition = player.transform.InverseTransformPoint(mouseWorldPosition);
+        return new Vector2Int(Mathf.RoundToInt(mouseLocalPosition.x), Mathf.RoundToInt(mouseLocalPosition.y));
+    }
+
+    private bool IsValidPlacement(Vector2Int gridPosition)
+    {
+        if (gridPosition == Vector2Int.zero)
+        {
+            // The initial block can be placed at the origin
+            return true;
+        }
+        // Check if the grid position is already occupied
+        if (shipBlocks.ContainsKey(gridPosition))
+        {
+            return false;
+        }
+
+        // Check if the new block is adjacent to an existing block
+        foreach (Vector2Int direction in new Vector2Int[] { Vector2Int.up,
+                                                            Vector2Int.down,
+                                                            Vector2Int.left,
+                                                            Vector2Int.right })
+        {
+            if (shipBlocks.ContainsKey(gridPosition + direction))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

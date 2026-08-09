@@ -58832,6 +58832,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildManager
   shopUI: {fileID: 998460769}
   gameUI: {fileID: 1187386670}
+  shipBuilder: {fileID: 2137269315}
 --- !u!1 &957120572
 GameObject:
   m_ObjectHideFlags: 0
@@ -59110,7 +59111,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopController
   shopUI: {fileID: 998460770}
   buildManager: {fileID: 919072756}
-  gameStateManager: {fileID: 2117883917}
 --- !u!1 &1805260490
 GameObject:
   m_ObjectHideFlags: 0
@@ -62669,6 +62669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShipBuilder
   player: {fileID: 4627736573909668591}
   baseBlockPrefab: {fileID: 1434617670374800585, guid: b31438999bb6b499680336ce09cdeeca, type: 3}
+  baseBlockPreviewPrefab: {fileID: 4993035705952105771, guid: eb3b8834629d2480281d5c3ead793656, type: 3}
 --- !u!1001 &403576893882388539
 PrefabInstance:
   m_ObjectHideFlags: 0
