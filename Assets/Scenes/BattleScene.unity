@@ -58551,6 +58551,7 @@ Transform:
   - {fileID: 957120573}
   - {fileID: 919072755}
   - {fileID: 1716712106}
+  - {fileID: 2137269314}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &834997765 stripped
@@ -62622,6 +62623,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 820695391}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2137269313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2137269314}
+  - component: {fileID: 2137269315}
+  m_Layer: 0
+  m_Name: ShibBuilder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2137269314
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137269313}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 820695391}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2137269315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137269313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c88cdc8e97d42ba833f81990518bc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipBuilder
+  player: {fileID: 4627736573909668591}
+  baseBlockPrefab: {fileID: 1434617670374800585, guid: b31438999bb6b499680336ce09cdeeca, type: 3}
 --- !u!1001 &403576893882388539
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62981,6 +63028,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3621619100624305259, guid: 90ee4e80f04eedd4cbed7fb179aad802, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4991755349737176851, guid: 90ee4e80f04eedd4cbed7fb179aad802, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6786984241821091461, guid: 90ee4e80f04eedd4cbed7fb179aad802, type: 3}

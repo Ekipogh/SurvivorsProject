@@ -39,7 +39,7 @@ public class GameStageManager : MonoBehaviour
 
     private void Start()
     {
-        // Initialize the game stage to Build at the start of the game
+        // Initialize the game stage to Battle at the start of the game
         SetGameStage(GameStage.Battle);
     }
 
