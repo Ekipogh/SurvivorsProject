@@ -58,5 +58,16 @@ public abstract class GameCharacter : MonoBehaviour
         }
     }
 
+    public void ApplyHealthBonus(float bonus)
+    {
+        Stats.MaxHealth += bonus;
+        Stats.CurrentHealth = Mathf.Min(Stats.CurrentHealth + bonus, Stats.MaxHealth);
+        if (_healthBar != null)
+        {
+            _healthBar.Initialize(Stats.MaxHealth);
+            _healthBar.UpdateBar(Stats.CurrentHealth, Microlight.MicroBar.UpdateAnim.Heal);
+        }
+    }
+
     protected abstract void Die();
 }

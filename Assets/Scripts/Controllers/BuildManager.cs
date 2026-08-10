@@ -5,11 +5,13 @@ public class BuildManager : MonoBehaviour
     [SerializeField] private Transform shopUI;
     [SerializeField] private Transform gameUI;
     [SerializeField] private ShipBuilder shipBuilder;
+    [SerializeField] private Player player;
+    [SerializeField] private GameStageManager gameStageManager;
     public void EnableBuildingMode(bool enable)
     {
         shopUI.gameObject.SetActive(enable);
         gameUI.gameObject.SetActive(!enable);
-        // TODO: Disable/enable player controls and other game mechanics as needed
+        player.SetControlEnabled(!enable);
         if (enable)
         {
             shipBuilder.BeginBuildMode();
@@ -43,5 +45,10 @@ public class BuildManager : MonoBehaviour
                 Debug.LogWarning("Unknown shop item type.");
                 break;
         }
+    }
+
+    public void OnBlockPlaced()
+    {
+        gameStageManager.SetGameStage(GameStage.Battle);
     }
 }

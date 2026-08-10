@@ -6,6 +6,7 @@ public class ShipBuilder : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private GameObject baseBlockPrefab;
     [SerializeField] private GameObject baseBlockPreviewPrefab;
+    [SerializeField] private BuildManager buildManager;
 
     private bool _isBuildingMode;
     private bool _isPlacingBlock;
@@ -66,6 +67,8 @@ public class ShipBuilder : MonoBehaviour
         ShipBlock shipBlockComponent = newBlock.GetComponent<ShipBlock>();
         shipBlockComponent.Initialize(gridPosition);
         shipBlocks.Add(gridPosition, shipBlockComponent);
+        player.ApplyHealthBonus(shipBlockComponent.HPBonus);
+        buildManager.OnBlockPlaced();
     }
 
     public void BeginBuildMode()
