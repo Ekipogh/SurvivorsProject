@@ -196,6 +196,23 @@ public class Player : GameCharacter
         PlayerStatsData.CurrentPoints += points;
     }
 
+    public bool TrySpendPoints(float points)
+    {
+        if (PlayerStatsData == null)
+        {
+            Debug.LogWarning("Cannot spend points because PlayerStatsData is not assigned.");
+            return false;
+        }
+
+        if (PlayerStatsData.CurrentPoints < points)
+        {
+            return false;
+        }
+
+        PlayerStatsData.CurrentPoints -= points;
+        return true;
+    }
+
     public void SetControlEnabled(bool enabled)
     {
         this.enabled = enabled;

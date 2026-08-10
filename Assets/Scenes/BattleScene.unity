@@ -62673,6 +62673,7 @@ MonoBehaviour:
   baseBlockPrefab: {fileID: 1434617670374800585, guid: b31438999bb6b499680336ce09cdeeca, type: 3}
   baseBlockPreviewPrefab: {fileID: 4993035705952105771, guid: eb3b8834629d2480281d5c3ead793656, type: 3}
   buildManager: {fileID: 919072756}
+  baseBlockCost: 25
 --- !u!1001 &403576893882388539
 PrefabInstance:
   m_ObjectHideFlags: 0

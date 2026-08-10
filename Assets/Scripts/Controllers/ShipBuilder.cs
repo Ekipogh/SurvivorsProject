@@ -7,6 +7,7 @@ public class ShipBuilder : MonoBehaviour
     [SerializeField] private GameObject baseBlockPrefab;
     [SerializeField] private GameObject baseBlockPreviewPrefab;
     [SerializeField] private BuildManager buildManager;
+    [SerializeField] private float baseBlockCost = 25f;
 
     private bool _isBuildingMode;
     private bool _isPlacingBlock;
@@ -23,13 +24,13 @@ public class ShipBuilder : MonoBehaviour
 
     void Update()
     {
-        if (_isBuildingMode)
+        if (_isBuildingMode && _isPlacingBlock)
         {
             UpdatePreview();
             if (Input.GetMouseButtonDown(0)) // Left mouse button
             {
                 Vector2Int gridPosition = GetGridPositionFromMouse();
-                PlaceBlock(gridPosition);
+                TryPlacePurchasedBlock(gridPosition);
             }
         }
     }
@@ -41,8 +42,7 @@ public class ShipBuilder : MonoBehaviour
             Debug.LogWarning("Ship already initialized.");
             return;
         }
-        // Add an initial ship block to the player's ship
-        PlaceBlock(Vector2Int.zero);
+        CreateBlock(Vector2Int.zero, applyHealthBonus: false);
     }
 
     private void InitPreviewBlock()
@@ -54,7 +54,7 @@ public class ShipBuilder : MonoBehaviour
         }
     }
 
-    private void PlaceBlock(Vector2Int gridPosition)
+    private void TryPlacePurchasedBlock(Vector2Int gridPosition)
     {
         if (!IsValidPlacement(gridPosition))
         {
@@ -62,13 +62,31 @@ public class ShipBuilder : MonoBehaviour
             return;
         }
 
+        if (!player.TrySpendPoints(baseBlockCost))
+        {
+            Debug.LogWarning($"Not enough points to place a ship block. Required: {baseBlockCost}");
+            return;
+        }
+
+        CreateBlock(gridPosition, applyHealthBonus: true);
+        _isPlacingBlock = false;
+        _currentPreviewBlock?.SetActive(false);
+        buildManager.OnBlockPlaced();
+    }
+
+    private ShipBlock CreateBlock(Vector2Int gridPosition, bool applyHealthBonus)
+    {
         GameObject newBlock = Instantiate(baseBlockPrefab, player.transform);
         newBlock.transform.localPosition = new Vector3(gridPosition.x, gridPosition.y, 0);
         ShipBlock shipBlockComponent = newBlock.GetComponent<ShipBlock>();
         shipBlockComponent.Initialize(gridPosition);
         shipBlocks.Add(gridPosition, shipBlockComponent);
-        player.ApplyHealthBonus(shipBlockComponent.HPBonus);
-        buildManager.OnBlockPlaced();
+        if (applyHealthBonus)
+        {
+            player.ApplyHealthBonus(shipBlockComponent.HPBonus);
+        }
+
+        return shipBlockComponent;
     }
 
     public void BeginBuildMode()
@@ -103,13 +121,9 @@ public class ShipBuilder : MonoBehaviour
         if (_isBuildingMode && _isPlacingBlock)
         {
             Vector2Int gridPosition = GetGridPositionFromMouse();
-            if (!shipBlocks.ContainsKey(gridPosition))
-            {
-                // Show preview of the block at the grid position
-                // You can instantiate a preview prefab or change the color of the block to indicate placement  
-                _currentPreviewBlock ??= Instantiate(baseBlockPreviewPrefab, player.transform);
-                _currentPreviewBlock.transform.localPosition = new Vector3(gridPosition.x, gridPosition.y, 0);
-            }
+            _currentPreviewBlock ??= Instantiate(baseBlockPreviewPrefab, player.transform);
+            _currentPreviewBlock.SetActive(IsValidPlacement(gridPosition));
+            _currentPreviewBlock.transform.localPosition = new Vector3(gridPosition.x, gridPosition.y, 0);
         }
     }
 
@@ -135,15 +149,15 @@ public class ShipBuilder : MonoBehaviour
 
     private bool IsValidPlacement(Vector2Int gridPosition)
     {
-        if (gridPosition == Vector2Int.zero)
-        {
-            // The initial block can be placed at the origin
-            return true;
-        }
         // Check if the grid position is already occupied
         if (shipBlocks.ContainsKey(gridPosition))
         {
             return false;
+        }
+
+        if (shipBlocks.Count == 0)
+        {
+            return gridPosition == Vector2Int.zero;
         }
 
         // Check if the new block is adjacent to an existing block

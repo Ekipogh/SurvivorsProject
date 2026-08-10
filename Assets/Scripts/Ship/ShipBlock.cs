@@ -20,7 +20,7 @@ public class ShipBlock : MonoBehaviour
 
     public bool TryMountWeapon(Weapon weapon)
     {
-        if (weapon == null || HasWeaponMounted)
+        if (weapon == null || weaponMountPoint == null || HasWeaponMounted)
             return false;
 
         MountedWeapon = weapon;

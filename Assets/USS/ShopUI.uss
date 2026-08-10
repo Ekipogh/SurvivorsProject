@@ -90,16 +90,8 @@
     picking-mode: ignore;
 }
 
-.shop-option-image-a {
-    background-image: url("project://database/Assets/Sprites/Weapons/SimpleGun.png?fileID=49891880447364413&guid=fbb45aae106ef23478d8d4babb9a7872&type=3#SimpleGun_0");
-}
-
-.shop-option-image-b {
-    background-image: url("project://database/Assets/Sprites/Weapons/rocket.png?fileID=-9158349384845336690&guid=8910e114366a4c2448a757d67a93f65f&type=3#rocket_0");
-}
-
-.shop-option-image-c {
-    background-image: url("project://database/Assets/Sprites/Weapons/lazer_gun.png?fileID=3549103124396321121&guid=da2f74f2d475415449144ae7b12b0f57&type=3#lazer_gun_0");
+.shop-option-image-block {
+    background-image: url("project://database/Assets/Sprites/Characters/playerbase.png?fileID=21300000&guid=dd50c3580a61f40baa29b16868686eff&type=3#playerbase");
 }
 
 .shop-option-label {
