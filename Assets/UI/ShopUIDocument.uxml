@@ -3,19 +3,19 @@
     <ui:VisualElement name="BuildShop" class="shop-screen">
         <ui:VisualElement class="shop-panel">
             <ui:Label text="Shop" name="ShopTitle" class="shop-title"/>
-            <ui:Label text="Choose a temporary stub option to continue." name="ShopSubtitle" class="shop-subtitle"/>
+            <ui:Label text="Choose a base block to expand your ship." name="ShopSubtitle" class="shop-subtitle"/>
             <ui:VisualElement name="ShopOptions" class="shop-options">
                 <ui:Button name="ShopOptionA" class="shop-option">
-                    <ui:VisualElement class="shop-option-image shop-option-image-a"/>
-                    <ui:Label text="Stub Option 1" class="shop-option-label"/>
+                    <ui:VisualElement class="shop-option-image shop-option-image-block"/>
+                    <ui:Label text="Base Block" class="shop-option-label"/>
                 </ui:Button>
                 <ui:Button name="ShopOptionB" class="shop-option">
-                    <ui:VisualElement class="shop-option-image shop-option-image-b"/>
-                    <ui:Label text="Stub Option 2" class="shop-option-label"/>
+                    <ui:VisualElement class="shop-option-image shop-option-image-block"/>
+                    <ui:Label text="Base Block" class="shop-option-label"/>
                 </ui:Button>
                 <ui:Button name="ShopOptionC" class="shop-option">
-                    <ui:VisualElement class="shop-option-image shop-option-image-c"/>
-                    <ui:Label text="Stub Option 3" class="shop-option-label"/>
+                    <ui:VisualElement class="shop-option-image shop-option-image-block"/>
+                    <ui:Label text="Base Block" class="shop-option-label"/>
                 </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>

@@ -42,7 +42,8 @@ public class Player : GameCharacter
         base.Awake();
 
         // reset points to 0 at the start of the game
-        if (PlayerStatsData != null)        {
+        if (PlayerStatsData != null)
+        {
             PlayerStatsData.CurrentPoints = 0f;
         }
     }
@@ -194,4 +195,28 @@ public class Player : GameCharacter
     {
         PlayerStatsData.CurrentPoints += points;
     }
+
+    public bool TrySpendPoints(float points)
+    {
+        if (PlayerStatsData == null)
+        {
+            Debug.LogWarning("Cannot spend points because PlayerStatsData is not assigned.");
+            return false;
+        }
+
+        if (PlayerStatsData.CurrentPoints < points)
+        {
+            return false;
+        }
+
+        PlayerStatsData.CurrentPoints -= points;
+        return true;
+    }
+
+    public void SetControlEnabled(bool enabled)
+    {
+        this.enabled = enabled;
+        Rb.simulated = enabled;
+    }
+
 }

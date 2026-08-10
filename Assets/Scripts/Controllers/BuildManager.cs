@@ -4,34 +4,51 @@ public class BuildManager : MonoBehaviour
 {
     [SerializeField] private Transform shopUI;
     [SerializeField] private Transform gameUI;
+    [SerializeField] private ShipBuilder shipBuilder;
+    [SerializeField] private Player player;
+    [SerializeField] private GameStageManager gameStageManager;
     public void EnableBuildingMode(bool enable)
     {
-        // Implement logic to enable or disable building mode
+        shopUI.gameObject.SetActive(enable);
+        gameUI.gameObject.SetActive(!enable);
+        player.SetControlEnabled(!enable);
         if (enable)
         {
-            Debug.Log("Building mode enabled.");
-            if (shopUI != null)
-            {
-                shopUI.gameObject.SetActive(true); // Show the building mode UI
-                gameUI?.gameObject.SetActive(false); // Hide the game UI
-            }
-            else
-            {
-                Debug.LogWarning("Build mode UI reference is not set.");
-            }
+            shipBuilder.BeginBuildMode();
         }
         else
         {
-            Debug.Log("Building mode disabled.");
-            if (shopUI != null)
-            {
-                shopUI.gameObject.SetActive(false); // Hide the building mode UI
-                gameUI?.gameObject.SetActive(true); // Show the game UI
-            }
-            else
-            {
-                Debug.LogWarning("Build mode UI reference is not set.");
-            }
+            shipBuilder.EndBuildMode();
         }
+    }
+
+    public void PurchaseShopItem(ShopItemType itemType)
+    {
+        // Disable shop UI
+        shopUI.gameObject.SetActive(false);
+        switch (itemType)
+        {
+            case ShopItemType.Weapon:
+                // Implement weapon purchase logic
+                Debug.Log("Purchasing Weapon");
+                break;
+            case ShopItemType.ShipBlock:
+                // Implement ship block purchase logic
+                Debug.Log("Purchasing Ship Block");
+                shipBuilder.BeginPlacingBlock();
+                break;
+            case ShopItemType.Upgrade:
+                // Implement upgrade purchase logic
+                Debug.Log("Purchasing Upgrade");
+                break;
+            default:
+                Debug.LogWarning("Unknown shop item type.");
+                break;
+        }
+    }
+
+    public void OnBlockPlaced()
+    {
+        gameStageManager.SetGameStage(GameStage.Battle);
     }
 }

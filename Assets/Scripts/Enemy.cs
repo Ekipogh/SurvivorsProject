@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microlight.MicroBar;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,6 +13,7 @@ public class Enemy : GameCharacter
     // States
     private bool _isDamagingPlayer = false;
     private bool _isDead = false;
+    private readonly HashSet<Collider2D> _playerHullContacts = new();
 
     private float _damageCooldown = 1f; // damage cooldown time in seconds
     private float _damageTimer = 2f; // timer to track damage cooldown, start able to damage player
@@ -42,7 +44,8 @@ public class Enemy : GameCharacter
     {
         if (other.CompareTag("Player"))
         {
-            _isDamagingPlayer = true;
+            _playerHullContacts.Add(other);
+            _isDamagingPlayer = _playerHullContacts.Count > 0;
         }
     }
 
@@ -50,8 +53,15 @@ public class Enemy : GameCharacter
     {
         if (other.CompareTag("Player"))
         {
-            _isDamagingPlayer = false;
+            _playerHullContacts.Remove(other);
+            _isDamagingPlayer = _playerHullContacts.Count > 0;
         }
+    }
+
+    private void OnDisable()
+    {
+        _playerHullContacts.Clear();
+        _isDamagingPlayer = false;
     }
 
     protected override void Die()
