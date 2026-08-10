@@ -8,6 +8,14 @@ public enum ShopItemType
     Upgrade
 }
 
+[System.Serializable]
+public class ShopItemOption
+{
+    public ShopItemType ItemType;
+    public string DisplayName;
+    public float Cost;
+}
+
 public class ShopController : MonoBehaviour
 {
     [SerializeField] private UIDocument shopUI;
@@ -17,6 +25,9 @@ public class ShopController : MonoBehaviour
     private VisualElement _boundRoot;
 
     [SerializeField] private BuildManager buildManager;
+    [SerializeField] private Player player;
+
+    [SerializeField] private ShopItemOption[] shopItemOptions;
 
     void Awake()
     {
@@ -119,7 +130,12 @@ public class ShopController : MonoBehaviour
 
     void OnShopButtonClicked(int buttonIndex)
     {
-        Debug.Log("Shop button clicked: " + buttonIndex);
-        buildManager.PurchaseShopItem(ShopItemType.ShipBlock);
+        float baseBlockCost = shopItemOptions[buttonIndex].Cost;
+        if (!player.CanAfford(baseBlockCost))
+        {
+            Debug.Log("Not enough points to purchase the item.");
+            return;
+        }
+        buildManager.PurchaseShopItem(shopItemOptions[buttonIndex]);
     }
 }

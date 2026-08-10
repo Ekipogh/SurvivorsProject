@@ -59068,6 +59068,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopController
   shopUI: {fileID: 998460770}
   buildManager: {fileID: 919072756}
+  player: {fileID: 4627736573909668591}
+  shopItemOptions:
+  - ItemType: 1
+    DisplayName: Base Ship Block
+    Cost: 250
+  - ItemType: 1
+    DisplayName: Base Ship Block
+    Cost: 2500
+  - ItemType: 1
+    DisplayName: Base Ship Block
+    Cost: 25000
 --- !u!1 &1805260490
 GameObject:
   m_ObjectHideFlags: 0

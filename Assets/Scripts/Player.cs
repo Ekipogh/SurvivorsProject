@@ -219,4 +219,15 @@ public class Player : GameCharacter
         Rb.simulated = enabled;
     }
 
+    public bool CanAfford(float cost)
+    {
+        if (PlayerStatsData == null)
+        {
+            Debug.LogWarning("Cannot check affordability because PlayerStatsData is not assigned.");
+            return false;
+        }
+
+        return PlayerStatsData.CurrentPoints >= cost;
+    }
+
 }

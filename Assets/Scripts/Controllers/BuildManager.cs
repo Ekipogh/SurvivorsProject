@@ -22,11 +22,11 @@ public class BuildManager : MonoBehaviour
         }
     }
 
-    public void PurchaseShopItem(ShopItemType itemType)
+    public void PurchaseShopItem(ShopItemOption itemOption)
     {
         // Disable shop UI
         shopUI.gameObject.SetActive(false);
-        switch (itemType)
+        switch (itemOption.ItemType)
         {
             case ShopItemType.Weapon:
                 // Implement weapon purchase logic
@@ -35,7 +35,7 @@ public class BuildManager : MonoBehaviour
             case ShopItemType.ShipBlock:
                 // Implement ship block purchase logic
                 Debug.Log("Purchasing Ship Block");
-                shipBuilder.BeginPlacingBlock();
+                shipBuilder.BeginPlacingBlock(itemOption.Cost);
                 break;
             case ShopItemType.Upgrade:
                 // Implement upgrade purchase logic
@@ -50,5 +50,11 @@ public class BuildManager : MonoBehaviour
     public void OnBlockPlaced()
     {
         gameStageManager.SetGameStage(GameStage.Battle);
+    }
+
+    public void CancelCurrentPurchase()
+    {
+        shipBuilder.CancelCurrentPlacement();
+        shopUI.gameObject.SetActive(true);
     }
 }
