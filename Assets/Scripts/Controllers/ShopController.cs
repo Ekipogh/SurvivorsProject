@@ -22,6 +22,7 @@ public class ShopController : MonoBehaviour
     private Button _optionA;
     private Button _optionB;
     private Button _optionC;
+    private Button[] _shopButtons = System.Array.Empty<Button>();
     private VisualElement _boundRoot;
 
     [SerializeField] private BuildManager buildManager;
@@ -57,6 +58,7 @@ public class ShopController : MonoBehaviour
         }
 
         BindButtons();
+        UpdateShopButtonAffordability();
     }
 
     void OnEnable()
@@ -87,6 +89,7 @@ public class ShopController : MonoBehaviour
         _optionA = root.Q<Button>("ShopOptionA");
         _optionB = root.Q<Button>("ShopOptionB");
         _optionC = root.Q<Button>("ShopOptionC");
+        _shopButtons = new Button[] { _optionA, _optionB, _optionC };
 
         if (_optionA == null || _optionB == null || _optionC == null)
         {
@@ -98,6 +101,7 @@ public class ShopController : MonoBehaviour
         _optionB.clicked += OnOptionBClicked;
         _optionC.clicked += OnOptionCClicked;
         _boundRoot = root;
+        UpdateShopButtonAffordability();
         Debug.Log("ShopController bound shop option click events.");
     }
 
@@ -110,6 +114,7 @@ public class ShopController : MonoBehaviour
         _optionA = null;
         _optionB = null;
         _optionC = null;
+        _shopButtons = System.Array.Empty<Button>();
         _boundRoot = null;
     }
 
@@ -137,5 +142,39 @@ public class ShopController : MonoBehaviour
             return;
         }
         buildManager.PurchaseShopItem(shopItemOptions[buttonIndex]);
+        UpdateShopButtonAffordability();
+    }
+
+    public void MakeShopUIVisible(bool visible)
+    {
+        if (shopUI != null)
+        {
+            shopUI.gameObject.SetActive(visible);
+        }
+        if (!visible)
+        {
+            return;
+        }
+
+        BindButtons();
+        UpdateShopButtonAffordability();
+    }
+
+    private void UpdateShopButtonAffordability()
+    {
+        if (player == null || shopItemOptions == null || _shopButtons == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < shopItemOptions.Length; i++)
+        {
+            float itemCost = shopItemOptions[i].Cost;
+            bool canAfford = player.CanAfford(itemCost);
+            if (i < _shopButtons.Length && _shopButtons[i] != null)
+            {
+                _shopButtons[i].SetEnabled(canAfford);
+            }
+        }
     }
 }

@@ -58785,7 +58785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 800508e5cf1428146884a8b963a06411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildManager
-  shopUI: {fileID: 998460769}
+  shopController: {fileID: 1716712107}
   gameUI: {fileID: 1187386670}
   shipBuilder: {fileID: 2137269315}
   player: {fileID: 4627736573909668591}
@@ -62639,7 +62639,6 @@ MonoBehaviour:
   baseBlockPrefab: {fileID: 1434617670374800585, guid: b31438999bb6b499680336ce09cdeeca, type: 3}
   baseBlockPreviewPrefab: {fileID: 4993035705952105771, guid: eb3b8834629d2480281d5c3ead793656, type: 3}
   buildManager: {fileID: 919072756}
-  baseBlockCost: 25
 --- !u!4 &1179659386257291078 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3621619100624305259, guid: 90ee4e80f04eedd4cbed7fb179aad802, type: 3}

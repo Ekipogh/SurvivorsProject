@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class BuildManager : MonoBehaviour
 {
-    [SerializeField] private Transform shopUI;
+    [SerializeField] private ShopController shopController;
     [SerializeField] private Transform gameUI;
     [SerializeField] private ShipBuilder shipBuilder;
     [SerializeField] private Player player;
     [SerializeField] private GameStageManager gameStageManager;
     public void EnableBuildingMode(bool enable)
     {
-        shopUI.gameObject.SetActive(enable);
+        shopController.MakeShopUIVisible(enable);
         gameUI.gameObject.SetActive(!enable);
         player.SetControlEnabled(!enable);
         if (enable)
@@ -25,7 +25,7 @@ public class BuildManager : MonoBehaviour
     public void PurchaseShopItem(ShopItemOption itemOption)
     {
         // Disable shop UI
-        shopUI.gameObject.SetActive(false);
+        shopController.MakeShopUIVisible(false);
         switch (itemOption.ItemType)
         {
             case ShopItemType.Weapon:
@@ -55,6 +55,6 @@ public class BuildManager : MonoBehaviour
     public void CancelCurrentPurchase()
     {
         shipBuilder.CancelCurrentPlacement();
-        shopUI.gameObject.SetActive(true);
+        shopController.MakeShopUIVisible(true);
     }
 }
