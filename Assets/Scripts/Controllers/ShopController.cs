@@ -59,6 +59,7 @@ public class ShopController : MonoBehaviour
 
         BindButtons();
         UpdateShopButtonAffordability();
+        UpdateShopButtonInfo();
     }
 
     void OnEnable()
@@ -102,6 +103,7 @@ public class ShopController : MonoBehaviour
         _optionC.clicked += OnOptionCClicked;
         _boundRoot = root;
         UpdateShopButtonAffordability();
+        UpdateShopButtonInfo();
         Debug.Log("ShopController bound shop option click events.");
     }
 
@@ -143,6 +145,7 @@ public class ShopController : MonoBehaviour
         }
         buildManager.PurchaseShopItem(shopItemOptions[buttonIndex]);
         UpdateShopButtonAffordability();
+        UpdateShopButtonInfo();
     }
 
     public void MakeShopUIVisible(bool visible)
@@ -158,6 +161,7 @@ public class ShopController : MonoBehaviour
 
         BindButtons();
         UpdateShopButtonAffordability();
+        UpdateShopButtonInfo();
     }
 
     private void UpdateShopButtonAffordability()
@@ -174,6 +178,23 @@ public class ShopController : MonoBehaviour
             if (i < _shopButtons.Length && _shopButtons[i] != null)
             {
                 _shopButtons[i].SetEnabled(canAfford);
+            }
+        }
+    }
+
+    private void UpdateShopButtonInfo()
+    {
+        if (shopItemOptions == null || _shopButtons == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < shopItemOptions.Length; i++)
+        {
+            if (i < _shopButtons.Length && _shopButtons[i] != null)
+            {
+                // change button label to show the cost and name of the item
+                _shopButtons[i].Q<Label>().text = $"{shopItemOptions[i].DisplayName} - {shopItemOptions[i].Cost} pts";
             }
         }
     }

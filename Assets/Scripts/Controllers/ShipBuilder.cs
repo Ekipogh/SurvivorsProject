@@ -32,6 +32,10 @@ public class ShipBuilder : MonoBehaviour
                 Vector2Int gridPosition = GetGridPositionFromMouse();
                 TryPlacePurchasedBlock(gridPosition);
             }
+            if (Input.GetMouseButtonDown(1)) // Right mouse button
+            {
+                CancelCurrentPlacement();
+            }
         }
     }
 
@@ -182,7 +186,7 @@ public class ShipBuilder : MonoBehaviour
         {
             _isPlacingBlock = false;
             _currentPreviewBlock?.SetActive(false);
-            Debug.Log("Current block placement canceled.");
+            buildManager.EnableBuildingMode(true);
         }
     }
 }
