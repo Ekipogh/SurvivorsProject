@@ -34,7 +34,11 @@ public class ShipBuilder : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(1)) // Right mouse button
             {
-                CancelCurrentPlacement();
+                buildManager.CancelCurrentPurchase();
+            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                buildManager.CancelCurrentPurchase();
             }
         }
     }
@@ -69,6 +73,7 @@ public class ShipBuilder : MonoBehaviour
         if (!player.TrySpendPoints(baseBlockCost))
         {
             Debug.LogWarning($"Not enough points to place a ship block. Required: {baseBlockCost}");
+            buildManager.CancelCurrentPurchase();
             return;
         }
 
@@ -186,7 +191,6 @@ public class ShipBuilder : MonoBehaviour
         {
             _isPlacingBlock = false;
             _currentPreviewBlock?.SetActive(false);
-            buildManager.EnableBuildingMode(true);
         }
     }
 }
