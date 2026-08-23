@@ -31,14 +31,17 @@ public class ShipBuilder : MonoBehaviour
             {
                 Vector2Int gridPosition = GetGridPositionFromMouse();
                 TryPlacePurchasedBlock(gridPosition);
+                return;
             }
             if (Input.GetMouseButtonDown(1)) // Right mouse button
             {
                 buildManager.CancelCurrentPurchase();
+                return;
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 buildManager.CancelCurrentPurchase();
+                return;
             }
         }
     }
