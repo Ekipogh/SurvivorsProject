@@ -8,15 +8,27 @@ public enum ShopItemType
     Upgrade
 }
 
+[System.Serializable]
+public class ShopItemOption
+{
+    public ShopItemType ItemType;
+    public string DisplayName;
+    public float Cost;
+}
+
 public class ShopController : MonoBehaviour
 {
     [SerializeField] private UIDocument shopUI;
     private Button _optionA;
     private Button _optionB;
     private Button _optionC;
+    private Button[] _shopButtons = System.Array.Empty<Button>();
     private VisualElement _boundRoot;
 
     [SerializeField] private BuildManager buildManager;
+    [SerializeField] private Player player;
+
+    [SerializeField] private ShopItemOption[] shopItemOptions;
 
     void Awake()
     {
@@ -46,6 +58,8 @@ public class ShopController : MonoBehaviour
         }
 
         BindButtons();
+        UpdateShopButtonAffordability();
+        UpdateShopButtonInfo();
     }
 
     void OnEnable()
@@ -76,6 +90,7 @@ public class ShopController : MonoBehaviour
         _optionA = root.Q<Button>("ShopOptionA");
         _optionB = root.Q<Button>("ShopOptionB");
         _optionC = root.Q<Button>("ShopOptionC");
+        _shopButtons = new Button[] { _optionA, _optionB, _optionC };
 
         if (_optionA == null || _optionB == null || _optionC == null)
         {
@@ -87,6 +102,8 @@ public class ShopController : MonoBehaviour
         _optionB.clicked += OnOptionBClicked;
         _optionC.clicked += OnOptionCClicked;
         _boundRoot = root;
+        UpdateShopButtonAffordability();
+        UpdateShopButtonInfo();
         Debug.Log("ShopController bound shop option click events.");
     }
 
@@ -99,6 +116,7 @@ public class ShopController : MonoBehaviour
         _optionA = null;
         _optionB = null;
         _optionC = null;
+        _shopButtons = System.Array.Empty<Button>();
         _boundRoot = null;
     }
 
@@ -119,7 +137,65 @@ public class ShopController : MonoBehaviour
 
     void OnShopButtonClicked(int buttonIndex)
     {
-        Debug.Log("Shop button clicked: " + buttonIndex);
-        buildManager.PurchaseShopItem(ShopItemType.ShipBlock);
+        float baseBlockCost = shopItemOptions[buttonIndex].Cost;
+        if (!player.CanAfford(baseBlockCost))
+        {
+            Debug.Log("Not enough points to purchase the item.");
+            return;
+        }
+        buildManager.PurchaseShopItem(shopItemOptions[buttonIndex]);
+        UpdateShopButtonAffordability();
+        UpdateShopButtonInfo();
+    }
+
+    public void MakeShopUIVisible(bool visible)
+    {
+        if (shopUI != null)
+        {
+            shopUI.gameObject.SetActive(visible);
+        }
+        if (!visible)
+        {
+            return;
+        }
+
+        BindButtons();
+        UpdateShopButtonAffordability();
+        UpdateShopButtonInfo();
+    }
+
+    private void UpdateShopButtonAffordability()
+    {
+        if (player == null || shopItemOptions == null || _shopButtons == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < shopItemOptions.Length; i++)
+        {
+            float itemCost = shopItemOptions[i].Cost;
+            bool canAfford = player.CanAfford(itemCost);
+            if (i < _shopButtons.Length && _shopButtons[i] != null)
+            {
+                _shopButtons[i].SetEnabled(canAfford);
+            }
+        }
+    }
+
+    private void UpdateShopButtonInfo()
+    {
+        if (shopItemOptions == null || _shopButtons == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < shopItemOptions.Length; i++)
+        {
+            if (i < _shopButtons.Length && _shopButtons[i] != null)
+            {
+                // change button label to show the cost and name of the item
+                _shopButtons[i].Q<Label>().text = $"{shopItemOptions[i].DisplayName} - {shopItemOptions[i].Cost} pts";
+            }
+        }
     }
 }

@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class BuildManager : MonoBehaviour
 {
-    [SerializeField] private Transform shopUI;
+    [SerializeField] private ShopController shopController;
     [SerializeField] private Transform gameUI;
     [SerializeField] private ShipBuilder shipBuilder;
     [SerializeField] private Player player;
     [SerializeField] private GameStageManager gameStageManager;
     public void EnableBuildingMode(bool enable)
     {
-        shopUI.gameObject.SetActive(enable);
+        shopController.MakeShopUIVisible(enable);
         gameUI.gameObject.SetActive(!enable);
         player.SetControlEnabled(!enable);
         if (enable)
@@ -22,11 +22,11 @@ public class BuildManager : MonoBehaviour
         }
     }
 
-    public void PurchaseShopItem(ShopItemType itemType)
+    public void PurchaseShopItem(ShopItemOption itemOption)
     {
         // Disable shop UI
-        shopUI.gameObject.SetActive(false);
-        switch (itemType)
+        shopController.MakeShopUIVisible(false);
+        switch (itemOption.ItemType)
         {
             case ShopItemType.Weapon:
                 // Implement weapon purchase logic
@@ -35,7 +35,7 @@ public class BuildManager : MonoBehaviour
             case ShopItemType.ShipBlock:
                 // Implement ship block purchase logic
                 Debug.Log("Purchasing Ship Block");
-                shipBuilder.BeginPlacingBlock();
+                shipBuilder.BeginPlacingBlock(itemOption.Cost);
                 break;
             case ShopItemType.Upgrade:
                 // Implement upgrade purchase logic
@@ -50,5 +50,11 @@ public class BuildManager : MonoBehaviour
     public void OnBlockPlaced()
     {
         gameStageManager.SetGameStage(GameStage.Battle);
+    }
+
+    public void CancelCurrentPurchase()
+    {
+        shipBuilder.CancelCurrentPlacement();
+        shopController.MakeShopUIVisible(true);
     }
 }

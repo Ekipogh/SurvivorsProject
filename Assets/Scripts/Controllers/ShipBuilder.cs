@@ -7,10 +7,10 @@ public class ShipBuilder : MonoBehaviour
     [SerializeField] private GameObject baseBlockPrefab;
     [SerializeField] private GameObject baseBlockPreviewPrefab;
     [SerializeField] private BuildManager buildManager;
-    [SerializeField] private float baseBlockCost = 25f;
 
     private bool _isBuildingMode;
     private bool _isPlacingBlock;
+    private float baseBlockCost;
 
     private readonly Dictionary<Vector2Int, ShipBlock> shipBlocks = new();
 
@@ -31,6 +31,17 @@ public class ShipBuilder : MonoBehaviour
             {
                 Vector2Int gridPosition = GetGridPositionFromMouse();
                 TryPlacePurchasedBlock(gridPosition);
+                return;
+            }
+            if (Input.GetMouseButtonDown(1)) // Right mouse button
+            {
+                buildManager.CancelCurrentPurchase();
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                buildManager.CancelCurrentPurchase();
+                return;
             }
         }
     }
@@ -65,6 +76,7 @@ public class ShipBuilder : MonoBehaviour
         if (!player.TrySpendPoints(baseBlockCost))
         {
             Debug.LogWarning($"Not enough points to place a ship block. Required: {baseBlockCost}");
+            buildManager.CancelCurrentPurchase();
             return;
         }
 
@@ -105,13 +117,14 @@ public class ShipBuilder : MonoBehaviour
         _isPlacingBlock = false;
     }
 
-    public void BeginPlacingBlock()
+    public void BeginPlacingBlock(float baseBlockCost)
     {
         if (!_isBuildingMode)
         {
             Debug.LogWarning("Cannot place block when not in build mode.");
             return;
         }
+        this.baseBlockCost = baseBlockCost;
         _isPlacingBlock = true;
         _currentPreviewBlock?.SetActive(true);
     }
@@ -173,5 +186,14 @@ public class ShipBuilder : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void CancelCurrentPlacement()
+    {
+        if (_isPlacingBlock)
+        {
+            _isPlacingBlock = false;
+            _currentPreviewBlock?.SetActive(false);
+        }
     }
 }
