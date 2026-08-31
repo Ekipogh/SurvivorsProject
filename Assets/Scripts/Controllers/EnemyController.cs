@@ -28,6 +28,10 @@ public class EnemyController : MonoBehaviour
 
     Coroutine _spawnCoroutine;
 
+    private int _completedBattleCount = 0;
+
+    public int GetCompletedBattleCount() => _completedBattleCount;
+
     void Awake()
     {
         CacheTilemaps();
@@ -98,6 +102,7 @@ public class EnemyController : MonoBehaviour
             }
             if (_killCount >= _requiredKillCount)
             {
+                _completedBattleCount++;
                 break; // Exit the loop if the required kill count is reached
             }
             SpawnEnemy();
