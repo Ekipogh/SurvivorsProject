@@ -58790,6 +58790,7 @@ MonoBehaviour:
   shipBuilder: {fileID: 2137269315}
   player: {fileID: 4627736573909668591}
   gameStageManager: {fileID: 2117883917}
+  enemyController: {fileID: 1888124744}
 --- !u!1 &957120572
 GameObject:
   m_ObjectHideFlags: 0
@@ -59073,12 +59074,24 @@ MonoBehaviour:
   - ItemType: 1
     DisplayName: Base Ship Block
     Cost: 250
+    IsPurchasable: 0
+    WeaponType: 
+    WeaponLevel: 0
+    DisabledReason: 
   - ItemType: 1
     DisplayName: Base Ship Block
     Cost: 2500
+    IsPurchasable: 0
+    WeaponType: 
+    WeaponLevel: 0
+    DisabledReason: 
   - ItemType: 1
     DisplayName: Base Ship Block
     Cost: 25000
+    IsPurchasable: 0
+    WeaponType: 
+    WeaponLevel: 0
+    DisabledReason: 
 --- !u!1 &1805260490
 GameObject:
   m_ObjectHideFlags: 0
