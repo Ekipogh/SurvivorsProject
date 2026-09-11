@@ -8,12 +8,23 @@ public enum ShopItemType
     Upgrade
 }
 
+public enum WeaponType
+{
+    Cannon,
+    Missile,
+    Railgun
+}
+
 [System.Serializable]
 public class ShopItemOption
 {
     public ShopItemType ItemType;
     public string DisplayName;
     public float Cost;
+    public bool IsPurchasable;
+    public WeaponType WeaponType;
+    public int WeaponLevel;
+    public string DisabledReason;
 }
 
 public class ShopController : MonoBehaviour
@@ -28,7 +39,11 @@ public class ShopController : MonoBehaviour
     [SerializeField] private BuildManager buildManager;
     [SerializeField] private Player player;
 
-    [SerializeField] private ShopItemOption[] shopItemOptions;
+    private ShopItemOption[] shopItemOptions;
+
+    private ShopOfferGenerator _shopOfferGenerator = new ShopOfferGenerator(ShopCatalog.CreateSnapshot());
+
+    private int _gameLevel = 0;
 
     void Awake()
     {
@@ -137,8 +152,8 @@ public class ShopController : MonoBehaviour
 
     void OnShopButtonClicked(int buttonIndex)
     {
-        float baseBlockCost = shopItemOptions[buttonIndex].Cost;
-        if (!player.CanAfford(baseBlockCost))
+        float shopOptionCost = shopItemOptions[buttonIndex].Cost;
+        if (!player.CanAfford(shopOptionCost))
         {
             Debug.Log("Not enough points to purchase the item.");
             return;
@@ -197,5 +212,16 @@ public class ShopController : MonoBehaviour
                 _shopButtons[i].Q<Label>().text = $"{shopItemOptions[i].DisplayName} - {shopItemOptions[i].Cost} pts";
             }
         }
+    }
+
+    private void GenerateShopOffers()
+    {
+        shopItemOptions = _shopOfferGenerator.GenerateOffers(_gameLevel, Random.Range(0, 10000));
+    }
+
+    public void OnBuildStageEntered(int gameLevel)
+    {
+        _gameLevel = gameLevel;
+        GenerateShopOffers();
     }
 }

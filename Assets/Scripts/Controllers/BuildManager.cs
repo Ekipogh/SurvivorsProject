@@ -7,9 +7,13 @@ public class BuildManager : MonoBehaviour
     [SerializeField] private ShipBuilder shipBuilder;
     [SerializeField] private Player player;
     [SerializeField] private GameStageManager gameStageManager;
+    [SerializeField] private EnemyController enemyController;
+
     public void EnableBuildingMode(bool enable)
     {
         shopController.MakeShopUIVisible(enable);
+        shopController.OnBuildStageEntered(enemyController.GetCompletedBattleCount());
+
         gameUI.gameObject.SetActive(!enable);
         player.SetControlEnabled(!enable);
         if (enable)
