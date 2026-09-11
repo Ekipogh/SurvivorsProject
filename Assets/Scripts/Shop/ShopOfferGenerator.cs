@@ -17,7 +17,7 @@ public class ShopOfferGenerator
         { 9, 5 },
         { 10, 5 }
     };
-    public ShopItemOption[] GenerateShopOffers(int level, int seed)
+    public ShopItemOption[] GenerateOffers(int level, int seed)
     {
         ShopItemOption[] offers = new ShopItemOption[3];
         var shipBlockOffer = new ShopItemOption

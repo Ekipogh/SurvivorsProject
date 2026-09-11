@@ -41,7 +41,7 @@ public class ShopController : MonoBehaviour
 
     private ShopItemOption[] shopItemOptions;
 
-    private ShopOfferGenerator _shopOfferGenerator = new ShopOfferGenerator();
+    private ShopOfferGenerator _shopOfferGenerator = new ShopOfferGenerator(ShopCatalog.CreateSnapshot());
 
     private int _gameLevel = 0;
 
@@ -216,7 +216,7 @@ public class ShopController : MonoBehaviour
 
     private void GenerateShopOffers()
     {
-        shopItemOptions = _shopOfferGenerator.GenerateShopOffers(_gameLevel, Random.Range(0, 10000));
+        shopItemOptions = _shopOfferGenerator.GenerateOffers(_gameLevel, Random.Range(0, 10000));
     }
 
     public void OnBuildStageEntered(int gameLevel)
